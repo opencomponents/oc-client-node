@@ -20,7 +20,7 @@ describe('client : get-component-data', () => {
     };
 
     before(done => {
-      const getComponentDataPrototype = injectr('../../client/src/get-components-data.js', {
+      const getComponentDataPrototype = injectr('../../src/get-components-data.js', {
         'minimal-request': minimalRequestStub,
         './href-builder': function() {
           return {
@@ -91,7 +91,7 @@ describe('client : get-component-data', () => {
     };
 
     before(done => {
-      const getComponentDataPrototype = injectr('../../client/src/get-components-data.js', {
+      const getComponentDataPrototype = injectr('../../src/get-components-data.js', {
         'minimal-request': minimalRequestStub,
         './href-builder': function() {
           return {
