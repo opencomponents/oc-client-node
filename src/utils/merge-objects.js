@@ -9,7 +9,7 @@ function addProperties(source, destination) {
 }
 
 // info: use Object.assign() w/ ES6
-module.exports = function (obj1, obj2) {
+module.exports = function(obj1, obj2) {
   const obj3 = {};
   addProperties(obj1, obj3);
   addProperties(obj2, obj3);

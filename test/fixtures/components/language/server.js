@@ -1,10 +1,9 @@
 'use strict';
 
-module.exports.data = function(context, callback){
-
+module.exports.data = function(context, callback) {
   var acL = context.acceptLanguage;
 
-  if(!!acL && !!acL.length && acL.length > 0){
+  if (!!acL && !!acL.length && acL.length > 0) {
     acL = acL[0].code;
   } else {
     acL = 'en';
@@ -16,6 +15,6 @@ module.exports.data = function(context, callback){
   };
 
   callback(null, {
-    language: languages[!!languages[acL] ? acL : 'en']
+    language: languages[languages[acL] ? acL : 'en']
   });
 };

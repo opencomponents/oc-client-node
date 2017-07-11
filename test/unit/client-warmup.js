@@ -5,42 +5,51 @@ const injectr = require('injectr');
 const sinon = require('sinon');
 
 describe('client : warmup', () => {
-
   let Warmup, requestStub;
 
-  const initialise = function(error, mockedResponse){
+  const initialise = function(error, mockedResponse) {
+    requestStub = sinon.stub().yields(
+      error,
+      mockedResponse || {
+        name: 'componentName',
+        version: '1.2.43',
+        oc: { parameters: {} }
+      }
+    );
 
-    requestStub = sinon.stub().yields(error, mockedResponse || {
-      name: 'componentName',
-      version: '1.2.43',
-      oc: { parameters: {} }
-    });
-
-    Warmup = injectr('../../src/warmup.js', {
-      'minimal-request': requestStub
-    }, { console: console });
+    Warmup = injectr(
+      '../../src/warmup.js',
+      {
+        'minimal-request': requestStub
+      },
+      { console: console }
+    );
   };
 
   describe('when warming up the client for responsive components', () => {
-
     let error, renderComponentStub;
 
-    beforeEach((done) => {
+    beforeEach(done => {
       initialise();
 
-      renderComponentStub = sinon.stub().yields(null, ['hello', 'component', 'another']);
+      renderComponentStub = sinon
+        .stub()
+        .yields(null, ['hello', 'component', 'another']);
 
-      const warmup = new Warmup({
-        components: {
-          'component1': '',
-          'component2': '1.x.x'
+      const warmup = new Warmup(
+        {
+          components: {
+            component1: '',
+            component2: '1.x.x'
+          },
+          registries: {
+            serverRendering: 'https://my-registry.com'
+          }
         },
-        registries: {
-          serverRendering: 'https://my-registry.com'
-        }
-      }, renderComponentStub);
+        renderComponentStub
+      );
 
-      warmup({}, (err) => {
+      warmup({}, err => {
         error = err;
         done();
       });
@@ -52,9 +61,15 @@ describe('client : warmup', () => {
 
     it('should make individual requests to ~info routes for each component + oc-client component', () => {
       expect(requestStub.args.length).to.equal(3);
-      expect(requestStub.args[0][0].url).to.equal('https://my-registry.com/component1/~info');
-      expect(requestStub.args[1][0].url).to.equal('https://my-registry.com/component2/1.x.x/~info');
-      expect(requestStub.args[2][0].url).to.equal('https://my-registry.com/oc-client/~info');
+      expect(requestStub.args[0][0].url).to.equal(
+        'https://my-registry.com/component1/~info'
+      );
+      expect(requestStub.args[1][0].url).to.equal(
+        'https://my-registry.com/component2/1.x.x/~info'
+      );
+      expect(requestStub.args[2][0].url).to.equal(
+        'https://my-registry.com/oc-client/~info'
+      );
     });
 
     it('should render the components', () => {
@@ -65,7 +80,7 @@ describe('client : warmup', () => {
   describe('when warming up the client for component with parameters', () => {
     let error, renderComponentStub;
 
-    beforeEach((done) => {
+    beforeEach(done => {
       initialise(null, {
         name: 'component-with-params',
         version: '1.4.6',
@@ -83,16 +98,19 @@ describe('client : warmup', () => {
 
       renderComponentStub = sinon.stub().yields(null, ['hello']);
 
-      const warmup = new Warmup({
-        components: {
-          'component-with-params': ''
+      const warmup = new Warmup(
+        {
+          components: {
+            'component-with-params': ''
+          },
+          registries: {
+            serverRendering: 'https://my-registry.com'
+          }
         },
-        registries: {
-          serverRendering: 'https://my-registry.com'
-        }
-      }, renderComponentStub);
+        renderComponentStub
+      );
 
-      warmup({}, (err) => {
+      warmup({}, err => {
         error = err;
         done();
       });
@@ -114,31 +132,35 @@ describe('client : warmup', () => {
   });
 
   describe('when warming up the client for unresponsive components', () => {
-
     let error;
 
-    beforeEach((done) => {
+    beforeEach(done => {
       initialise('timeout');
 
-      const warmup = new Warmup({
-        components: { component1: '' },
-        registries: {
-          serverRendering: 'https://my-registry.com'
-        }
-      }, () => {});
+      const warmup = new Warmup(
+        {
+          components: { component1: '' },
+          registries: {
+            serverRendering: 'https://my-registry.com'
+          }
+        },
+        () => {}
+      );
 
-      warmup({
-        headers: {
-          'Accept-Language': 'en-US'
+      warmup(
+        {
+          headers: {
+            'Accept-Language': 'en-US'
+          }
+        },
+        err => {
+          error = err;
+          done();
         }
-      }, (err) => {
-        error = err;
-        done();
-      });
+      );
     });
 
     it('should return an error with all the details', () => {
-
       const expectedRequest = {
         url: 'https://my-registry.com/component1/~info',
         json: true,
@@ -147,7 +169,10 @@ describe('client : warmup', () => {
         timeout: 5
       };
 
-      const expectedError = 'Error: Error warming up oc-client: request ' + JSON.stringify(expectedRequest) + ' failed (timeout)';
+      const expectedError =
+        'Error: Error warming up oc-client: request ' +
+        JSON.stringify(expectedRequest) +
+        ' failed (timeout)';
 
       expect(error.toString()).to.be.equal(expectedError);
     });

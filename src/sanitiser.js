@@ -5,7 +5,7 @@ const format = require('stringformat');
 const packageInfo = require('../package');
 const _ = require('./utils/helpers');
 
-const lowerHeaderKeys = function(headers){
+const lowerHeaderKeys = function(headers) {
   const result = {};
 
   _.each(headers, (header, headerName) => {
@@ -16,28 +16,31 @@ const lowerHeaderKeys = function(headers){
 };
 
 const getDefaultUserAgent = function() {
-  return format('oc-client-{0}/{1}-{2}-{3}',
-                packageInfo.version,
-                process.version,
-                process.platform,
-                process.arch);
+  return format(
+    'oc-client-{0}/{1}-{2}-{3}',
+    packageInfo.version,
+    process.version,
+    process.platform,
+    process.arch
+  );
 };
 
 const sanitiseDefaultOptions = function(options) {
-  if(_.isFunction(options)){
+  if (_.isFunction(options)) {
     options = {};
   }
 
   options = options || {};
   options.headers = lowerHeaderKeys(options.headers);
-  options.headers['user-agent'] = options.headers['user-agent'] || getDefaultUserAgent();
+  options.headers['user-agent'] =
+    options.headers['user-agent'] || getDefaultUserAgent();
 
   options.timeout = options.timeout || 5;
   return options;
 };
 
 module.exports = {
-  sanitiseConfiguration: function(conf){
+  sanitiseConfiguration: function(conf) {
     conf = conf || {};
     conf.components = conf.components || {};
     conf.cache = conf.cache || {};
@@ -45,14 +48,14 @@ module.exports = {
     return conf;
   },
 
-  sanitiseGlobalRenderOptions: function(options, config){
+  sanitiseGlobalRenderOptions: function(options, config) {
     options = sanitiseDefaultOptions(options);
     options.headers.accept = 'application/vnd.oc.unrendered+json';
 
-    options.container = (options.container === true) ?  true : false;
-    options.renderInfo = (options.renderInfo === false) ? false : true;
+    options.container = options.container === true ? true : false;
+    options.renderInfo = options.renderInfo === false ? false : true;
 
-    if(!!config.registries && !config.registries.clientRendering){
+    if (!!config.registries && !config.registries.clientRendering) {
       options.disableFailoverRendering = true;
     }
 

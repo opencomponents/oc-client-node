@@ -5,24 +5,26 @@ const injectr = require('injectr');
 const sinon = require('sinon');
 
 describe('client', () => {
+  let validatorStub, Client, init;
 
-  let validatorStub,
-    Client,
-    init;
-
-  const initialise = function(){
-
+  const initialise = function() {
     validatorStub = sinon.stub();
-    Client = injectr('../../src/index.js', {
-      './validator': { validateConfiguration: validatorStub }
-    }, { __dirname: '/something/', console: console });
+    Client = injectr(
+      '../../src/index.js',
+      {
+        './validator': { validateConfiguration: validatorStub }
+      },
+      { __dirname: '/something/', console: console }
+    );
   };
 
   describe('when not correctly initialised', () => {
     before(() => {
       initialise();
       validatorStub.returns({ isValid: false, error: 'argh!' });
-      init = function(){ Client(); };
+      init = function() {
+        Client();
+      };
     });
 
     it('should throw an exception', () => {

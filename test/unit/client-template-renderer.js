@@ -4,35 +4,34 @@ const expect = require('chai').expect;
 const injectr = require('injectr');
 
 describe('client : template-renderer', () => {
-
   let templateRenderer, error, result;
 
-  const next = (done) => (err, res) => {
+  const next = done => (err, res) => {
     error = err;
     result = res;
     done();
   };
 
   const initialise = (err, res, exception) => {
-
     const TemplateRenderer = injectr('../../src/template-renderer.js', {
       './utils/require-template': () => ({
         render: (x, cb) => {
-          if(exception){ throw exception; }
+          if (exception) {
+            throw exception;
+          }
           cb(err, res);
         }
       }),
-      './html-renderer': ({
+      './html-renderer': {
         renderedComponent: x => `<transformed>${x.html}</transformed>`
-      })
+      }
     });
 
     templateRenderer = new TemplateRenderer();
   };
 
   describe('when rendering template succeeds', () => {
-
-    beforeEach((done) => {
+    beforeEach(done => {
       initialise(null, '<div>hello</div>');
       templateRenderer(null, null, { templateType: 'blargh' }, next(done));
     });
@@ -47,8 +46,7 @@ describe('client : template-renderer', () => {
   });
 
   describe('when rendering template fails', () => {
-
-    beforeEach((done) => {
+    beforeEach(done => {
       initialise(new Error('blabla'));
       templateRenderer(null, null, { templateType: 'blargh' }, next(done));
     });
@@ -59,8 +57,7 @@ describe('client : template-renderer', () => {
   });
 
   describe('when rendering template throws an error', () => {
-
-    beforeEach((done) => {
+    beforeEach(done => {
       initialise(null, null, new Error('exception'));
       templateRenderer(null, null, { templateType: 'blargh' }, next(done));
     });

@@ -9,28 +9,27 @@ const settings = require('./settings');
 const templates = require('./templates');
 const _ = require('./utils/helpers');
 
-module.exports = function(cache, config){
-
+module.exports = function(cache, config) {
   const getOCClientScript = new GetOCClientScript(cache),
     buildHref = new HrefBuilder(config);
 
-  return function(toDo, options, cb){
+  return function(toDo, options, cb) {
     const toProcess = [];
 
-    _.each(toDo, (action) => {
-      if(action.render === 'client' && !action.done){
+    _.each(toDo, action => {
+      if (action.render === 'client' && !action.done) {
         toProcess.push(action);
       }
     });
 
-    if(_.isEmpty(toProcess)){
+    if (_.isEmpty(toProcess)) {
       return cb();
     }
 
     getOCClientScript((clientErr, clientJs) => {
-      _.each(toDo, (action) => {
-        if(action.render === 'client'){
-          if(!!clientErr || !clientJs){
+      _.each(toDo, action => {
+        if (action.render === 'client') {
+          if (!!clientErr || !clientJs) {
             action.result.error = settings.genericError;
             action.result.html = '';
           } else {
@@ -43,10 +42,17 @@ module.exports = function(cache, config){
               return;
             }
 
-            const unrenderedComponentTag = htmlRenderer.unrenderedComponent(componentClientHref, options);
+            const unrenderedComponentTag = htmlRenderer.unrenderedComponent(
+              componentClientHref,
+              options
+            );
 
-            if(action.failover){
-              action.result.html = format(templates.clientScript, clientJs, unrenderedComponentTag);
+            if (action.failover) {
+              action.result.html = format(
+                templates.clientScript,
+                clientJs,
+                unrenderedComponentTag
+              );
             } else {
               action.result.error = null;
               action.result.html = unrenderedComponentTag;

@@ -3,12 +3,15 @@
 const htmlRenderer = require('./html-renderer');
 const requireTemplate = require('./utils/require-template');
 
-module.exports = function(){
-  return function(template, model, options, callback){
-
+module.exports = function() {
+  return function(template, model, options, callback) {
     let type = options.templateType;
-    if (type === 'jade') { type = 'oc-template-jade'; }
-    if (type === 'handlebars') { type = 'oc-template-handlebars'; }
+    if (type === 'jade') {
+      type = 'oc-template-jade';
+    }
+    if (type === 'handlebars') {
+      type = 'oc-template-handlebars';
+    }
 
     try {
       const ocTemplate = requireTemplate(type);

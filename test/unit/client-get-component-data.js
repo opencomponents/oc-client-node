@@ -4,7 +4,6 @@ const injectr = require('injectr');
 const sinon = require('sinon');
 
 describe('client : get-component-data', () => {
-
   describe('when invoked for one component', () => {
     const baseUrl = 'http://localhost:3030';
     const resultUrl = 'http://localhost:3030/hello-world/1.0.0/?p1=v1&p2=v2';
@@ -14,24 +13,27 @@ describe('client : get-component-data', () => {
     const prepareServerGetStub = sinon.stub().returns(resultUrl);
 
     const options = {
-      parameters: {p1: 'v1', 'p2': 'v2'},
-      headers: {'header-a': 'header-value b'},
+      parameters: { p1: 'v1', p2: 'v2' },
+      headers: { 'header-a': 'header-value b' },
       timeout: 10
     };
 
     before(done => {
-      const getComponentDataPrototype = injectr('../../src/get-components-data.js', {
-        'minimal-request': minimalRequestStub,
-        './href-builder': function() {
-          return {
-            server: serverStub,
-            prepareServerGet: prepareServerGetStub
-          };
+      const getComponentDataPrototype = injectr(
+        '../../src/get-components-data.js',
+        {
+          'minimal-request': minimalRequestStub,
+          './href-builder': function() {
+            return {
+              server: serverStub,
+              prepareServerGet: prepareServerGetStub
+            };
+          }
         }
-      });
+      );
 
       const getComponentData = new getComponentDataPrototype({
-        registries: {serverRendering: baseUrl}
+        registries: { serverRendering: baseUrl }
       });
 
       const component = {
@@ -39,21 +41,32 @@ describe('client : get-component-data', () => {
         version: '1.0.0'
       };
 
-      getComponentData([{
-        component: component,
-        container: false,
-        pos: 0,
-        render: 'server',
-        result: {}
-      }], options, () => {
-        done();
-      });
+      getComponentData(
+        [
+          {
+            component: component,
+            container: false,
+            pos: 0,
+            render: 'server',
+            result: {}
+          }
+        ],
+        options,
+        () => {
+          done();
+        }
+      );
     });
 
     it('href-builder prepareServerGet method is invoked', () => {
       sinon.assert.calledOnce(serverStub);
       sinon.assert.calledOnce(prepareServerGetStub);
-      sinon.assert.calledWith(prepareServerGetStub, baseUrl, {name: 'hello-world', version: '1.0.0'}, options);
+      sinon.assert.calledWith(
+        prepareServerGetStub,
+        baseUrl,
+        { name: 'hello-world', version: '1.0.0' },
+        options
+      );
     });
 
     it('a GET request is made with the URL returned by href-builder.prepareServerGet method', () => {
@@ -75,8 +88,8 @@ describe('client : get-component-data', () => {
     const prepareServerGetStub = sinon.stub().returns(baseUrl + '/test-route'); // Invalid - should never be called
 
     const options = {
-      parameters: {p1: 'v1', 'p2': 'v2'},
-      headers: {'header-a': 'header-value b'},
+      parameters: { p1: 'v1', p2: 'v2' },
+      headers: { 'header-a': 'header-value b' },
       timeout: 10
     };
 
@@ -91,35 +104,45 @@ describe('client : get-component-data', () => {
     };
 
     before(done => {
-      const getComponentDataPrototype = injectr('../../src/get-components-data.js', {
-        'minimal-request': minimalRequestStub,
-        './href-builder': function() {
-          return {
-            server: serverStub,
-            prepareServerGet: prepareServerGetStub
-          };
+      const getComponentDataPrototype = injectr(
+        '../../src/get-components-data.js',
+        {
+          'minimal-request': minimalRequestStub,
+          './href-builder': function() {
+            return {
+              server: serverStub,
+              prepareServerGet: prepareServerGetStub
+            };
+          }
         }
-      });
+      );
 
       const getComponentData = new getComponentDataPrototype({
-        registries: {serverRendering: baseUrl}
+        registries: { serverRendering: baseUrl }
       });
 
-      getComponentData([{
-        component: component0,
-        container: false,
-        pos: 0,
-        render: 'server',
-        result: {}
-      },{
-        component: component1,
-        container: false,
-        pos: 1,
-        render: 'server',
-        result: {}
-      }], options, () => {
-        done();
-      });
+      getComponentData(
+        [
+          {
+            component: component0,
+            container: false,
+            pos: 0,
+            render: 'server',
+            result: {}
+          },
+          {
+            component: component1,
+            container: false,
+            pos: 1,
+            render: 'server',
+            result: {}
+          }
+        ],
+        options,
+        () => {
+          done();
+        }
+      );
     });
 
     it('href-builder prepareServerGet method is not invoked', () => {
@@ -141,5 +164,4 @@ describe('client : get-component-data', () => {
       });
     });
   });
-
 });

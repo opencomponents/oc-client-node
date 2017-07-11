@@ -5,11 +5,9 @@ const injectr = require('injectr');
 const sinon = require('sinon');
 
 describe('client : get-compiled-template', () => {
-
   let getCompiledTemplate;
 
-  const initialise = function(requestStub){
-
+  const initialise = function(requestStub) {
     const GetCompiledTemplate = injectr('../../src/get-compiled-template.js', {
       'minimal-request': requestStub,
       './try-get-cached': sinon.stub()
@@ -19,14 +17,14 @@ describe('client : get-compiled-template', () => {
   };
 
   describe('when template file request fails', () => {
-
     let error;
-    const errorExample = '<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><Message>' +
+    const errorExample =
+      '<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><Message>' +
       'Access Denied</Message><RequestId>1234567890</RequestId><HostId>asdfghjklqwertyuiop</HostId></Error>';
 
     const requestStub = sinon.stub().yields(403, errorExample);
 
-    before((done) => {
+    before(done => {
       initialise(requestStub);
 
       const template = {
@@ -34,7 +32,7 @@ describe('client : get-compiled-template', () => {
         src: 'https://cdn.com/components/1.3.5/template.js'
       };
 
-      getCompiledTemplate(template, false, 5, (err) => {
+      getCompiledTemplate(template, false, 5, err => {
         error = err;
         done();
       });
@@ -44,7 +42,10 @@ describe('client : get-compiled-template', () => {
       expect(error).to.eql({
         status: 403,
         response: {
-          error: 'request https://cdn.com/components/1.3.5/template.js failed ('+ errorExample +')'
+          error:
+            'request https://cdn.com/components/1.3.5/template.js failed (' +
+            errorExample +
+            ')'
         }
       });
     });

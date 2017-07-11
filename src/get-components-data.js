@@ -7,10 +7,15 @@ const settings = require('./settings');
 const HrefBuilder = require('./href-builder');
 const _ = require('./utils/helpers');
 
-module.exports = function(config){
+module.exports = function(config) {
   const hrefBuilder = new HrefBuilder(config);
 
-  const handleErrorResponse = function(requestDetails, error, response, components) {
+  const handleErrorResponse = function(
+    requestDetails,
+    error,
+    response,
+    components
+  ) {
     let errorDetails = error ? error.toString() : undefined;
 
     if (response && response.error) {
@@ -29,7 +34,11 @@ module.exports = function(config){
     _.each(components, () => {
       responses.push({
         response: {
-          error: format(settings.connectionError, JSON.stringify(requestDetails), errorDetails)
+          error: format(
+            settings.connectionError,
+            JSON.stringify(requestDetails),
+            errorDetails
+          )
         }
       });
     });
@@ -51,8 +60,13 @@ module.exports = function(config){
     };
 
     request(requestDetails, (error, responses) => {
-      if(!!error || !responses || _.isEmpty(responses)){
-        responses = handleErrorResponse(requestDetails, error, responses, serverRendering.components);
+      if (!!error || !responses || _.isEmpty(responses)) {
+        responses = handleErrorResponse(
+          requestDetails,
+          error,
+          responses,
+          serverRendering.components
+        );
       }
 
       callback(responses);
@@ -61,7 +75,11 @@ module.exports = function(config){
 
   const performGet = function(endpoint, serverRendering, options, callback) {
     const component = serverRendering.components[0];
-    const requestUrl = hrefBuilder.prepareServerGet(endpoint, component, options);
+    const requestUrl = hrefBuilder.prepareServerGet(
+      endpoint,
+      component,
+      options
+    );
 
     const requestDetails = {
       url: requestUrl,
@@ -72,38 +90,45 @@ module.exports = function(config){
     };
 
     request(requestDetails, (error, responses) => {
-      if(!!error || !responses || _.isEmpty(responses)) {
-        responses = handleErrorResponse(requestDetails, error, responses, serverRendering.components);
+      if (!!error || !responses || _.isEmpty(responses)) {
+        responses = handleErrorResponse(
+          requestDetails,
+          error,
+          responses,
+          serverRendering.components
+        );
       } else {
         //Prepare the response in case the request is a GET for a single component
-        responses = [{
-          response: responses,
-          status: 200
-        }];
+        responses = [
+          {
+            response: responses,
+            status: 200
+          }
+        ];
       }
 
       callback(responses);
     });
   };
 
-  return function(toDo, options, cb){
+  return function(toDo, options, cb) {
     const serverRenderingFail = settings.serverSideRenderingFail,
       serverRendering = { components: [], positions: [] },
       serverRenderingEndpoint = hrefBuilder.server(options);
 
-    _.each(toDo, (action) => {
-      if(action.render === 'server'){
+    _.each(toDo, action => {
+      if (action.render === 'server') {
         serverRendering.components.push(action.component);
         serverRendering.positions.push(action.pos);
       }
     });
 
-    if(_.isEmpty(serverRendering.components)){
+    if (_.isEmpty(serverRendering.components)) {
       return cb();
-    } else if(!serverRenderingEndpoint){
-      _.each(toDo, (action) => {
+    } else if (!serverRenderingEndpoint) {
+      _.each(toDo, action => {
         action.result.error = serverRenderingFail;
-        if(options.disableFailoverRendering){
+        if (options.disableFailoverRendering) {
           action.result.html = '';
           action.done = true;
         } else {
@@ -115,42 +140,57 @@ module.exports = function(config){
       return cb(serverRenderingFail);
     }
 
-    const performRequest = (serverRendering.components.length === 1) ? performGet : performPost;
+    const performRequest =
+      serverRendering.components.length === 1 ? performGet : performPost;
 
-    performRequest(serverRenderingEndpoint, serverRendering, options, (responses) => {
-      _.each(responses, (response, i) => {
-        const action = toDo[serverRendering.positions[i]];
+    performRequest(
+      serverRenderingEndpoint,
+      serverRendering,
+      options,
+      responses => {
+        _.each(responses, (response, i) => {
+          const action = toDo[serverRendering.positions[i]];
 
-        if(action.render === 'server'){
-          if(response.status !== 200){
+          if (action.render === 'server') {
+            if (response.status !== 200) {
+              let errorDetails;
+              if (!response.status && response.response.error) {
+                errorDetails = response.response.error;
+              } else {
+                let errorDescription =
+                  response.response && response.response.error;
+                if (
+                  errorDescription &&
+                  response.response.details &&
+                  response.response.details.originalError
+                ) {
+                  errorDescription += response.response.details.originalError;
+                }
 
-            let errorDetails;
-            if(!response.status && response.response.error){
-              errorDetails = response.response.error;
-            } else {
-
-              let errorDescription = (response.response && response.response.error);
-              if(errorDescription && response.response.details && response.response.details.originalError){
-                errorDescription += response.response.details.originalError;
+                errorDetails = format(
+                  '{0} ({1})',
+                  errorDescription || '',
+                  response.status
+                );
               }
 
-              errorDetails = format('{0} ({1})', errorDescription || '', response.status);
-            }
-
-            action.result.error = new Error(format(serverRenderingFail, errorDetails));
-            if(options.disableFailoverRendering){
-              action.result.html = '';
-              action.done = true;
+              action.result.error = new Error(
+                format(serverRenderingFail, errorDetails)
+              );
+              if (options.disableFailoverRendering) {
+                action.result.html = '';
+                action.done = true;
+              } else {
+                action.render = 'client';
+                action.failover = true;
+              }
             } else {
-              action.render = 'client';
-              action.failover = true;
+              action.apiResponse = response.response;
             }
-          } else {
-            action.apiResponse = response.response;
           }
-        }
-      });
-      cb();
-    });
+        });
+        cb();
+      }
+    );
   };
 };

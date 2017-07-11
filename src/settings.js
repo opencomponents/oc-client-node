@@ -8,7 +8,8 @@ module.exports = {
   clientRenderingOptionsNotSet: 'Client rendering options not set',
   emptyResponse: 'Empty response',
   genericError: 'Internal client error',
-  legacyComponent: 'The component can\'t be rendered because it was published with an older OC version',
+  legacyComponent:
+    "The component can't be rendered because it was published with an older OC version",
   missingComponentName: 'The component name is missing',
   registriesEmpty: 'registries must contain at least one endpoint',
   registriesIsNotObject: 'registries must be an object',
