@@ -22,11 +22,11 @@
       "prettier-eslint --write",
       "git add"
     ],
-    "test/unit/*.js": [
+    "test/unit/**/*.js": [
       "prettier-eslint --write",
       "git add"
     ],
-    "test/acceptance/*.js": [
+    "test/acceptance/**/*.js": [
       "prettier-eslint --write",
       "git add"
     ]
