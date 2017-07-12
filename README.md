@@ -7,7 +7,7 @@ Node.js client for [OpenComponents](https://github.com/opentable/oc)
 
 Node.js version: **4** required
 
-Build status: Linux: [![Build Status](https://secure.travis-ci.org/opentable/oc.png?branch=master)](http://travis-ci.org/opentable/oc) | Windows: [![Build status](https://ci.appveyor.com/api/projects/status/8cklgw4hymutqrsg?svg=true)](https://ci.appveyor.com/project/matteofigus/oc)
+Build status: Linux: [![Build Status](https://secure.travis-ci.org/opencomponents/oc-client-node.png?branch=master)](http://travis-ci.org/opencomponents/oc-client-node) | Windows: [![Build status](https://ci.appveyor.com/api/projects/status/sdd5sry94fba433t?svg=true)](https://ci.appveyor.com/project/matteofigus/oc-client-node)
 
 
 Disclaimer: This project is still under heavy development and the API is likely to change at any time. In case you would find any issues, check the [troubleshooting page](../CONTRIBUTING.md#troubleshooting).
