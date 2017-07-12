@@ -1,0 +1,56 @@
+{
+  "name": "oc-client",
+  "version": "2.1.20",
+  "description": "Node.js oc client",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opencomponents/oc-client-node"
+  },
+  "author": "Matteo Figus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/opencomponents/oc-client-node/issues"
+  },
+  "homepage": "https://github.com/opencomponents/oc-client-node",
+  "scripts": {
+    "test": "mocha test/**/*.js",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "prettier-eslint --write",
+      "git add"
+    ],
+    "test/unit/**/*.js": [
+      "prettier-eslint --write",
+      "git add"
+    ],
+    "test/acceptance/**/*.js": [
+      "prettier-eslint --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "chai": "3.5.0",
+    "cheerio": "0.22.0",
+    "injectr": "0.5.1",
+    "mocha": "^3.0.2",
+    "oc": "^0.38.8",
+    "sinon": "^1.17.5",
+    "husky": "^0.14.3",
+    "prettier-eslint-cli": "^4.1.1",
+    "lint-staged": "^3.6.0"
+  },
+  "dependencies": {
+    "minimal-request": "2.2.0",
+    "nice-cache": "0.0.5",
+    "oc-client-browser": "1.0.1",
+    "oc-template-handlebars": "4.0.1",
+    "oc-template-jade": "4.0.2",
+    "stringformat": "0.0.5"
+  },
+  "engines": {
+    "node": ">=4"
+  }
+}
