@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/opencomponents/oc-client-node/issues"
   },
-  "homepage": "https://github.com//opencomponents/oc-client-node",
+  "homepage": "https://github.com/opencomponents/oc-client-node",
   "scripts": {
     "test": "mocha test/**/*.js",
     "precommit": "lint-staged"
@@ -22,7 +22,11 @@
       "prettier-eslint --write",
       "git add"
     ],
-    "test/**/*.js": [
+    "test/unit/**/*.js": [
+      "prettier-eslint --write",
+      "git add"
+    ],
+    "test/acceptance/**/*.js": [
       "prettier-eslint --write",
       "git add"
     ]
