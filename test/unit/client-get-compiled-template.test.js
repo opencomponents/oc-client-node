@@ -24,7 +24,7 @@ describe('client : get-compiled-template', () => {
 
     const requestStub = sinon.stub().yields(403, errorExample);
 
-    before(done => {
+    beforeAll(done => {
       initialise(requestStub);
 
       const template = {
@@ -39,7 +39,7 @@ describe('client : get-compiled-template', () => {
     });
 
     it('should return an error containing the details', () => {
-      expect(error).to.eql({
+      expect(error).toEqual({
         status: 403,
         response: {
           error:

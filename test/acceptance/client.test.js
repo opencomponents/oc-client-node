@@ -1,7 +1,6 @@
 'use strict';
 
 const cheerio = require('cheerio');
-const expect = require('chai').expect;
 const path = require('path');
 
 describe('The node.js OC client', () => {
@@ -38,14 +37,14 @@ describe('The node.js OC client', () => {
   };
 
   describe('when initialised providing registries properties', () => {
-    before(done => {
+    beforeAll(done => {
       client = new oc.Client(getClientConfig(3030));
       clientOfflineRegistry = new oc.Client(getClientConfig(1234));
       registry = new oc.Registry(conf);
       registry.start(done);
     });
 
-    after(done => {
+    afterAll(done => {
       registry.close(done);
     });
 
@@ -54,7 +53,7 @@ describe('The node.js OC client', () => {
         describe('when each component requires different params', () => {
           let $components;
           let $errs;
-          before(done => {
+          beforeAll(done => {
             client.renderComponents(
               [
                 {
@@ -82,19 +81,19 @@ describe('The node.js OC client', () => {
           });
 
           it('should return rendered contents', () => {
-            expect($components[0]).to.contain('hi Jane Marple');
-            expect($components[1]).to.contain('hi Hercule Poirot');
+            expect($components[0]).toContain('hi Jane Marple');
+            expect($components[1]).toContain('hi Hercule Poirot');
           });
 
           it('should return null errors', () => {
-            expect($errs).to.be.null;
+            expect($errs).toBeNull();
           });
         });
 
         describe('when each component requires the same params', () => {
           let $components;
           let $errs;
-          before(done => {
+          beforeAll(done => {
             client.renderComponents(
               [
                 {
@@ -121,19 +120,19 @@ describe('The node.js OC client', () => {
           });
 
           it('should return rendered contents', () => {
-            expect($components[0]).to.contain('hi Jane Marple');
-            expect($components[1]).to.contain('hi Jane Marple');
+            expect($components[0]).toContain('hi Jane Marple');
+            expect($components[1]).toContain('hi Jane Marple');
           });
 
           it('should return null errors', () => {
-            expect($errs).to.be.null;
+            expect($errs).toBeNull();
           });
         });
 
         describe('when components have some common parameters and some different', () => {
           let $components;
           let $errs;
-          before(done => {
+          beforeAll(done => {
             client.renderComponents(
               [
                 {
@@ -166,12 +165,12 @@ describe('The node.js OC client', () => {
           });
 
           it('should return rendered contents', () => {
-            expect($components[0]).to.contain('hi Hercule Poirot');
-            expect($components[1]).to.contain('hi Jane Marple');
+            expect($components[0]).toContain('hi Hercule Poirot');
+            expect($components[1]).toContain('hi Jane Marple');
           });
 
           it('should return null errors', () => {
-            expect($errs).to.be.null;
+            expect($errs).toBeNull();
           });
         });
       });
@@ -179,7 +178,7 @@ describe('The node.js OC client', () => {
       describe('when rendering both on the server-side', () => {
         let $components;
         let $errs;
-        before(done => {
+        beforeAll(done => {
           client.renderComponents(
             [
               {
@@ -202,19 +201,19 @@ describe('The node.js OC client', () => {
         });
 
         it('should return rendered contents', () => {
-          expect($components['hello-world']).to.equal('Hello world!');
-          expect($components['no-containers']).to.equal('Hello world!');
+          expect($components['hello-world']).toBe('Hello world!');
+          expect($components['no-containers']).toBe('Hello world!');
         });
 
         it('should return null errors', () => {
-          expect($errs).to.be.null;
+          expect($errs).toBeNull();
         });
       });
 
       describe('when the request body is malformed', () => {
         let error, result;
 
-        before(done => {
+        beforeAll(done => {
           client.renderComponents(
             [
               {
@@ -249,12 +248,12 @@ describe('The node.js OC client', () => {
         };
 
         it('should contain a blank html response', () => {
-          expect(result).to.deep.equal(['', '']);
+          expect(result).toEqual(['', '']);
         });
 
         it('should contain the error details', () => {
-          expect(error).to.be.Array;
-          expect(error.length).to.be.equal(2);
+          expect(error).toBeInstanceOf(Array);
+          expect(error.length).toEqual(2);
 
           const exp = getRegExpFromJson(expectedRequest),
             expected = new RegExp(
@@ -265,14 +264,14 @@ describe('The node.js OC client', () => {
                 'component 1 must have name property\\)'
             );
 
-          expect(error[0].toString()).to.match(expected);
-          expect(error[1].toString()).to.match(expected);
+          expect(error[0].toString()).toMatch(expected);
+          expect(error[1].toString()).toMatch(expected);
         });
       });
 
       describe('when rendering both on the client-side', () => {
         let $components;
-        before(done => {
+        beforeAll(done => {
           client.renderComponents(
             [
               {
@@ -294,10 +293,10 @@ describe('The node.js OC client', () => {
         });
 
         it('should return browser oc tags', () => {
-          expect($components['hello-world'].attr('href')).to.equal(
+          expect($components['hello-world'].attr('href')).toBe(
             'http://localhost:3030/hello-world/~1.0.0'
           );
-          expect($components['no-containers'].attr('href')).to.equal(
+          expect($components['no-containers'].attr('href')).toBe(
             'http://localhost:3030/no-containers'
           );
         });
@@ -305,7 +304,7 @@ describe('The node.js OC client', () => {
 
       describe('when rendering one on the server, one on the client', () => {
         let $components;
-        before(done => {
+        beforeAll(done => {
           client.renderComponents(
             [
               {
@@ -329,11 +328,11 @@ describe('The node.js OC client', () => {
         });
 
         it('should return rendered content for rendered component', () => {
-          expect($components['hello-world']).to.equal('Hello world!');
+          expect($components['hello-world']).toBe('Hello world!');
         });
 
         it('should return browser oc tag for unrendered component', () => {
-          expect($components['no-containers'].attr('href')).to.equal(
+          expect($components['no-containers'].attr('href')).toBe(
             'http://localhost:3030/no-containers'
           );
         });
@@ -341,7 +340,7 @@ describe('The node.js OC client', () => {
 
       describe('when rendering one with container, one without container', () => {
         let $components;
-        before(done => {
+        beforeAll(done => {
           client.renderComponents(
             [
               {
@@ -366,17 +365,17 @@ describe('The node.js OC client', () => {
 
         it('should return first component with container', () => {
           const $component = cheerio.load($components.with)('oc-component');
-          expect($component.text()).to.equal('Hello world!');
+          expect($component.text()).toBe('Hello world!');
         });
 
         it('should return second component without container', () => {
-          expect($components.without).to.equal('Hello world!');
+          expect($components.without).toBe('Hello world!');
         });
       });
 
       describe('when there are errors in some of them', () => {
         let $errs;
-        before(done => {
+        beforeAll(done => {
           client.renderComponents(
             [
               {
@@ -405,11 +404,11 @@ describe('The node.js OC client', () => {
         });
 
         it('should return an error for each component with error', () => {
-          expect($errs[0].toString()).to.be.equal(
+          expect($errs[0].toString()).toBe(
             'Error: Server-side rendering failed: Component "hello-world-i-dont-exist" not found on local repository (404)'
           );
-          expect($errs[1]).to.be.null;
-          expect($errs[2].toString()).to.be.equal(
+          expect($errs[1]).toBeNull();
+          expect($errs[2].toString()).toBe(
             'Error: Server-side rendering failed: Component execution error: An error happened (500)'
           );
         });
@@ -417,7 +416,7 @@ describe('The node.js OC client', () => {
     });
 
     describe('when server-side rendering an existing component linked to a responsive registry', () => {
-      before(done => {
+      beforeAll(done => {
         client.renderComponent(
           'hello-world',
           { container: true },
@@ -429,15 +428,15 @@ describe('The node.js OC client', () => {
       });
 
       it('should use the serverRendering url', () => {
-        expect($component.attr('href')).to.equal(
+        expect($component.attr('href')).toBe(
           'http://localhost:3030/hello-world/~1.0.0'
         );
-        expect($component.data('rendered')).to.equal(true);
+        expect($component.data('rendered')).toBe(true);
       });
     });
 
     describe('when server-side rendering an existing component overriding registry urls', () => {
-      before(done => {
+      beforeAll(done => {
         const options = {
           container: true,
           registries: {
@@ -457,15 +456,15 @@ describe('The node.js OC client', () => {
       });
 
       it('should use the overwritten serverRendering url', () => {
-        expect($component.attr('href')).to.equal(
+        expect($component.attr('href')).toBe(
           'http://localhost:3030/hello-world/~1.0.0'
         );
-        expect($component.data('rendered')).to.equal(true);
+        expect($component.data('rendered')).toBe(true);
       });
     });
 
     describe('when client-side rendering an existing component overriding registry urls', () => {
-      before(done => {
+      beforeAll(done => {
         const options = {
           container: true,
           registries: {
@@ -486,14 +485,14 @@ describe('The node.js OC client', () => {
       });
 
       it('should use the overwritten clientRendering url', () => {
-        expect($component.attr('href')).to.equal(
+        expect($component.attr('href')).toBe(
           'http://localhost:3030/hello-world/~1.0.0'
         );
       });
     });
 
     describe('when client-side rendering an existing component', () => {
-      before(done => {
+      beforeAll(done => {
         clientOfflineRegistry.renderComponent(
           'hello-world',
           { render: 'client' },
@@ -505,7 +504,7 @@ describe('The node.js OC client', () => {
       });
 
       it('should use clientRendering url', () => {
-        expect($component.attr('href')).to.equal(
+        expect($component.attr('href')).toBe(
           'http://localhost:1234/hello-world/~1.0.0'
         );
       });
@@ -515,7 +514,7 @@ describe('The node.js OC client', () => {
       let error;
       let info;
 
-      before(done => {
+      beforeAll(done => {
         client.getComponentsInfo(
           [
             {
@@ -558,8 +557,8 @@ describe('The node.js OC client', () => {
       ];
 
       it('should return valid info', () => {
-        expect(error).to.be.null;
-        expect(info).to.be.deep.equal(expectedInfo);
+        expect(error).toBeNull();
+        expect(info).toEqual(expectedInfo);
       });
     });
 
@@ -567,7 +566,7 @@ describe('The node.js OC client', () => {
       let error;
       let info;
 
-      before(done => {
+      beforeAll(done => {
         client.getComponentsInfo(
           [
             {
@@ -591,13 +590,13 @@ describe('The node.js OC client', () => {
       });
 
       it('should return both valid info and error', () => {
-        expect(error).to.be.ok;
-        expect(error).to.be.instanceof(Array);
-        expect(error.length).to.be.equal(3);
+        expect(error).toBeTruthy();
+        expect(error).toBeInstanceOf(Array);
+        expect(error.length).toBe(3);
 
-        expect(info).to.be.ok;
-        expect(info).to.be.instanceof(Array);
-        expect(info.length).to.be.equal(3);
+        expect(info).toBeTruthy();
+        expect(info).toBeInstanceOf(Array);
+        expect(info.length).toBe(3);
       });
 
       it('should return correct info for the 1st component', () => {
@@ -614,29 +613,29 @@ describe('The node.js OC client', () => {
           }
         ];
 
-        expect(info[0]).to.be.deep.equal(expectedFirstComponentInfo[0]);
+        expect(info[0]).toEqual(expectedFirstComponentInfo[0]);
       });
 
       it('should return info with errors for the 2nd and 3rd component', () => {
-        expect(info[1].componentName).to.be.equal('no-containers');
-        expect(info[1].requestedVersion).to.be.equal('3.5.7');
-        expect(info[1].error.message).to.be.equal(
+        expect(info[1].componentName).toBe('no-containers');
+        expect(info[1].requestedVersion).toBe('3.5.7');
+        expect(info[1].error.message).toBe(
           'Getting component info failed: Component "no-containers" with version "3.5.7" not found on local repository (404)'
         );
 
-        expect(info[2].componentName).to.be.equal('non-existing');
-        expect(info[2].requestedVersion).to.be.equal('1.x.x');
-        expect(info[2].error.message).to.be.equal(
+        expect(info[2].componentName).toBe('non-existing');
+        expect(info[2].requestedVersion).toBe('1.x.x');
+        expect(info[2].error.message).toBe(
           'Getting component info failed: Component "non-existing" not found on local repository (404)'
         );
       });
 
       it('should return error array with errors for the 2nd and 3rd components', () => {
-        expect(error[0]).to.not.be.ok;
-        expect(error[1].message).to.be.equal(
+        expect(error[0]).toBeNull();
+        expect(error[1].message).toBe(
           'Getting component info failed: Component "no-containers" with version "3.5.7" not found on local repository (404)'
         );
-        expect(error[2].message).to.be.equal(
+        expect(error[2].message).toBe(
           'Getting component info failed: Component "non-existing" not found on local repository (404)'
         );
       });
@@ -644,14 +643,14 @@ describe('The node.js OC client', () => {
   });
 
   describe('when correctly initialised', () => {
-    before(done => {
+    beforeAll(done => {
       client = new oc.Client(getClientConfig(3030));
       clientOfflineRegistry = new oc.Client(getClientConfig(1234));
       registry = new oc.Registry(conf);
       registry.start(done);
     });
 
-    after(done => {
+    afterAll(done => {
       registry.close(done);
     });
 
@@ -670,7 +669,7 @@ describe('The node.js OC client', () => {
       describe('when client-side failover rendering disabled', () => {
         let error;
 
-        before(done => {
+        beforeAll(done => {
           const options = { disableFailoverRendering: true };
 
           clientOfflineRegistry.renderComponent(
@@ -685,7 +684,7 @@ describe('The node.js OC client', () => {
         });
 
         it('should contain a blank html response', () => {
-          expect(result).to.eql('');
+          expect(result).toBe('');
         });
 
         it('should contain the error details', () => {
@@ -697,14 +696,14 @@ describe('The node.js OC client', () => {
             );
 
           const actual = error.toString();
-          expect(actual).to.match(expected);
+          expect(actual).toMatch(expected);
         });
       });
 
       describe('when client-side failover rendering enabled (default)', () => {
         let $clientScript, error;
 
-        before(done => {
+        beforeAll(done => {
           clientOfflineRegistry.renderComponent('hello-world', (err, html) => {
             error = err;
             const $ = cheerio.load(html);
@@ -715,15 +714,15 @@ describe('The node.js OC client', () => {
         });
 
         it('should include the client-side rendering script', () => {
-          expect($clientScript).to.have.length.above(0);
+          expect($clientScript).not.toHaveLength(0);
         });
 
         it('should return non rendered contents', () => {
-          expect($component.data('rendered')).to.be.undefined;
+          expect($component.data('rendered')).toBeUndefined();
         });
 
         it('should contain the component url', () => {
-          expect($component.attr('href')).to.equal(
+          expect($component.attr('href')).toBe(
             'http://localhost:1234/hello-world/~1.0.0'
           );
         });
@@ -736,7 +735,7 @@ describe('The node.js OC client', () => {
                 ' failed \\(Error: connect ECONNREFUSED(.*?)\\)'
             );
 
-          expect(error.toString()).to.match(expected);
+          expect(error.toString()).toMatch(expected);
         });
       });
 
@@ -752,7 +751,7 @@ describe('The node.js OC client', () => {
           }
         };
 
-        before(done => {
+        beforeAll(done => {
           clientOfflineRegistry.renderComponent(
             'hello-world',
             options,
@@ -767,13 +766,13 @@ describe('The node.js OC client', () => {
         });
 
         it('should include the client-side rendering script', () => {
-          expect($clientScript).to.have.length.above(0);
+          expect($clientScript).not.toHaveLength(0);
         });
 
         it('should contain the component url including parameters and __ocAcceptLanguage parameter', () => {
           const u =
             'http://localhost:1234/hello-world/~1.0.0/?hi=john&__ocAcceptLanguage=da%2C%20en-gb%3Bq%3D0.8%2C%20en%3Bq%3D0.7';
-          expect($component.attr('href')).to.equal(u);
+          expect($component.attr('href')).toBe(u);
         });
 
         it('should contain the error details', () => {
@@ -796,7 +795,7 @@ describe('The node.js OC client', () => {
                 ' failed \\(Error: connect ECONNREFUSED(.*?)\\)'
             );
 
-          expect(error.toString()).to.match(expected);
+          expect(error.toString()).toMatch(expected);
         });
       });
     });
@@ -805,7 +804,7 @@ describe('The node.js OC client', () => {
       describe('when the component is missing', () => {
         let error, result;
 
-        before(done => {
+        beforeAll(done => {
           client.renderComponent(
             'non-existing-component',
             {
@@ -831,7 +830,7 @@ describe('The node.js OC client', () => {
         };
 
         it('should contain a blank html response', () => {
-          expect(result).to.eql('');
+          expect(result).toBe('');
         });
 
         it('should contain the error details', () => {
@@ -843,7 +842,7 @@ describe('The node.js OC client', () => {
                 '\\(404 Component "non-existing-component" not found on local repository\\)'
             );
 
-          expect(error.toString()).to.match(expected);
+          expect(error.toString()).toMatch(expected);
         });
       });
 
@@ -862,7 +861,7 @@ describe('The node.js OC client', () => {
           json: true
         };
 
-        before(done => {
+        beforeAll(done => {
           client.renderComponent(
             'errors-component',
             {
@@ -879,7 +878,7 @@ describe('The node.js OC client', () => {
         });
 
         it('should contain a blank html response', () => {
-          expect(result).to.eql('');
+          expect(result).toBe('');
         });
 
         it('should contain the error details', () => {
@@ -890,13 +889,13 @@ describe('The node.js OC client', () => {
                 ' failed \\(timeout\\)'
             );
 
-          expect(error.toString()).to.match(expected);
+          expect(error.toString()).toMatch(expected);
         });
       });
 
       describe('when container option = true', () => {
         let error;
-        before(done => {
+        beforeAll(done => {
           client.renderComponent(
             'hello-world',
             { container: true },
@@ -909,30 +908,30 @@ describe('The node.js OC client', () => {
         });
 
         it('should return rendered contents', () => {
-          expect($component.data('rendered')).to.eql(true);
+          expect($component.data('rendered')).toBe(true);
         });
 
         it("should contain the hashed view's key", () => {
-          expect($component.data('hash')).to.equal(
+          expect($component.data('hash')).toBe(
             'c6fcae4d23d07fd9a7e100508caf8119e998d7a9'
           );
         });
 
         it('should return expected html', () => {
-          expect($component.text()).to.contain('Hello world!');
+          expect($component.text()).toContain('Hello world!');
         });
 
         it('should contain the component version', () => {
-          expect($component.data('version')).to.equal('1.0.0');
+          expect($component.data('version')).toBe('1.0.0');
         });
 
         it('should contain a null error', () => {
-          expect(error).to.be.null;
+          expect(error).toBeNull();
         });
       });
 
       describe('when container option = false', () => {
-        before(done => {
+        beforeAll(done => {
           client.renderComponent(
             'hello-world',
             { container: false, renderInfo: false },
@@ -944,7 +943,7 @@ describe('The node.js OC client', () => {
         });
 
         it('should return expected html without the container', () => {
-          expect(result).to.equal('Hello world!');
+          expect(result).toBe('Hello world!');
         });
       });
     });
@@ -953,7 +952,7 @@ describe('The node.js OC client', () => {
       let error;
       let info;
 
-      before(done => {
+      beforeAll(done => {
         clientOfflineRegistry.getComponentsInfo(
           [
             {
@@ -1002,26 +1001,26 @@ describe('The node.js OC client', () => {
       );
 
       it('should fail and return an errors array with an error corresponding to every component requested', () => {
-        expect(error).to.not.be.undefined;
-        expect(error).to.be.instanceof(Array);
-        expect(error.length).to.be.equal(2);
+        expect(error).not.toBeUndefined();
+        expect(error).toBeInstanceOf(Array);
+        expect(error.length).toBe(2);
 
-        expect(error[0]).to.match(expectedError);
-        expect(error[1]).to.match(expectedError);
+        expect(error[0].toString()).toMatch(expectedError);
+        expect(error[1].toString()).toMatch(expectedError);
       });
 
       it('return an info array with components requested together with an error for every component', () => {
-        expect(info).to.not.be.undefined;
-        expect(info).to.be.instanceof(Array);
-        expect(info.length).to.be.equal(2);
+        expect(info).not.toBeUndefined();
+        expect(info).toBeInstanceOf(Array);
+        expect(info.length).toBe(2);
 
-        expect(info[0].componentName).to.be.equal('hello-world');
-        expect(info[0].requestedVersion).to.be.undefined;
-        expect(info[0].error).to.match(expectedError);
+        expect(info[0].componentName).toBe('hello-world');
+        expect(info[0].requestedVersion).toBeUndefined();
+        expect(info[0].error.toString()).toMatch(expectedError);
 
-        expect(info[1].componentName).to.be.equal('other-component');
-        expect(info[1].requestedVersion).to.be.equal('1.0.0');
-        expect(info[1].error).to.match(expectedError);
+        expect(info[1].componentName).toBe('other-component');
+        expect(info[1].requestedVersion).toBe('1.0.0');
+        expect(info[1].error.toString()).toMatch(expectedError);
       });
     });
   });
