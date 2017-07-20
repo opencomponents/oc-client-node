@@ -12,7 +12,7 @@ function isValidTemplate(template) {
     return false;
   }
 
-  return ['getInfo', 'getCompiledTemplate', 'compile', 'render'].every(
+  return ['getInfo', 'getCompiledTemplate', 'render'].every(
     method => template[method]
   );
 }
