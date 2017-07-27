@@ -12,7 +12,7 @@ test('typeof client to equal "function"', () => {
 describe('client api', () => {
   const api = client();
 
-  test('client api to match snapshot', () => {
+  test('to match snapshot', () => {
     expect(api).toMatchSnapshot();
   });
 
