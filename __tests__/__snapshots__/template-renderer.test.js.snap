@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bad template type 1`] = `
+Array [
+  Array [
+    "Error requiring oc-template: \\"unsupported\\" not found",
+  ],
+]
+`;
+
+exports[`handlebars 1`] = `
+Array [
+  Array [
+    [TypeError: Cannot read property 'compiler' of null],
+  ],
+]
+`;
+
+exports[`jade 1`] = `
+Array [
+  Array [
+    [TypeError: options.template is not a function],
+    "<oc-component href=\\"{0}\\" data-hash=\\"{1}\\" data-name=\\"\\" data-rendered=\\"true\\" data-version=\\"{3}\\">{4}</oc-component>",
+  ],
+]
+`;
