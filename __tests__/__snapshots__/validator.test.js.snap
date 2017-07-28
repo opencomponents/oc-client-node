@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`conf is an empty object 1`] = `
+Object {
+  "isValid": true,
+}
+`;
+
+exports[`conf.registries is a valid object 1`] = `
+Object {
+  "isValid": true,
+}
+`;
+
+exports[`conf.registries is an empty array 1`] = `
+Object {
+  "error": "Configuration is not valid: registries must be an object",
+  "isValid": false,
+}
+`;
+
+exports[`conf.registries is an empty object 1`] = `
+Object {
+  "error": "Configuration is not valid: registries must contain at least one endpoint",
+  "isValid": false,
+}
+`;
+
+exports[`validator api 1`] = `
+Object {
+  "validateConfiguration": [Function],
+}
+`;

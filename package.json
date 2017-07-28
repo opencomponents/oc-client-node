@@ -14,9 +14,8 @@
   },
   "homepage": "https://github.com/opencomponents/oc-client-node",
   "scripts": {
-    "test": "mocha test/**/*.js",
-    "precommit": "lint-staged",
-    "jest": "jest"
+    "test": "mocha test/**/*.js && jest --coverage",
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "src/**/*.js": [
