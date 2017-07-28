@@ -1,0 +1,100 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sanitiseConfiguration 1`] = `
+Object {
+  "cache": Object {},
+  "components": Object {},
+}
+`;
+
+exports[`sanitiseGlobalGetInfoOptions 1`] = `
+Object {
+  "headers": Object {
+    "accept": "application/vnd.oc.info+json",
+    "user-agent": "oc-client-2.1.21/v8.2.1-darwin-x64",
+  },
+  "timeout": 5,
+}
+`;
+
+exports[`sanitiseGlobalRenderOptions all empty 1`] = `
+Object {
+  "container": false,
+  "headers": Object {
+    "accept": "application/vnd.oc.unrendered+json",
+    "user-agent": "oc-client-2.1.21/v8.2.1-darwin-x64",
+  },
+  "renderInfo": true,
+  "timeout": 5,
+}
+`;
+
+exports[`sanitiseGlobalRenderOptions clientRendering is false 1`] = `
+Object {
+  "container": false,
+  "disableFailoverRendering": true,
+  "headers": Object {
+    "accept": "application/vnd.oc.unrendered+json",
+    "user-agent": "oc-client-2.1.21/v8.2.1-darwin-x64",
+  },
+  "renderInfo": true,
+  "timeout": 5,
+}
+`;
+
+exports[`sanitiseGlobalRenderOptions container is true and renderInfo is false 1`] = `
+Object {
+  "container": true,
+  "headers": Object {
+    "accept": "application/vnd.oc.unrendered+json",
+    "user-agent": "oc-client-2.1.21/v8.2.1-darwin-x64",
+  },
+  "renderInfo": false,
+  "timeout": 5,
+}
+`;
+
+exports[`sanitiseGlobalRenderOptions options is a function 1`] = `
+Object {
+  "container": false,
+  "headers": Object {
+    "accept": "application/vnd.oc.unrendered+json",
+    "user-agent": "oc-client-2.1.21/v8.2.1-darwin-x64",
+  },
+  "renderInfo": true,
+  "timeout": 5,
+}
+`;
+
+exports[`sanitiseGlobalRenderOptions options is a function 2`] = `
+Object {
+  "container": false,
+  "headers": Object {
+    "accept": "application/vnd.oc.unrendered+json",
+    "user-agent": "oc-client-2.1.21/v8.2.1-darwin-x64",
+  },
+  "renderInfo": true,
+  "timeout": 5,
+}
+`;
+
+exports[`sanitiseGlobalRenderOptions options w/ headers 1`] = `
+Object {
+  "container": false,
+  "headers": Object {
+    "accept": "application/vnd.oc.unrendered+json",
+    "user-agent": "oc-client-2.1.21/v8.2.1-darwin-x64",
+    "x-ot-channel": "MobileWeb",
+  },
+  "renderInfo": true,
+  "timeout": 5,
+}
+`;
+
+exports[`sanitiser api 1`] = `
+Object {
+  "sanitiseConfiguration": [Function],
+  "sanitiseGlobalGetInfoOptions": [Function],
+  "sanitiseGlobalRenderOptions": [Function],
+}
+`;

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`client api to match snapshot 1`] = `
+Object {
+  "getComponentsInfo": [Function],
+  "init": [Function],
+  "renderComponent": [Function],
+  "renderComponents": [Function],
+  "renderTemplate": [Function],
+}
+`;
+
+exports[`error 1`] = `"Configuration is not valid: registries must contain at least one endpoint"`;
