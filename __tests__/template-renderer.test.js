@@ -32,7 +32,6 @@ const scenarios = [
 scenarios.forEach(({ description, template, model, options }) => {
   test(description, () => {
     const callback = jest.fn();
-    // template, model, options, callback
     templateRenderer(template, model, options, callback);
     expect(callback).toHaveBeenCalled();
     expect(callback.mock.calls).toMatchSnapshot();
