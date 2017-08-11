@@ -22,7 +22,8 @@ describe('client : sanitiser', () => {
 
   describe('when sanitising global rendering options', () => {
     describe('when user-agent not already set', () => {
-      const result = sanitiser.sanitiseGlobalRenderOptions({}, {});
+      const config = sanitiser.sanitiseConfiguration();
+      const result = sanitiser.sanitiseGlobalRenderOptions({}, config);
 
       it('should set oc-client user-agent', () => {
         expect(result.headers.templates).to.deep.equal({

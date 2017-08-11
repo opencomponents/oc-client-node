@@ -35,11 +35,7 @@ const sanitiseDefaultOptions = function(options, config) {
   if (_.isFunction(options)) {
     options = {};
   }
-  config = config || {};
-  config.templates = config.templates || [
-    'oc-template-handlebars',
-    'oc-template-jade'
-  ];
+
   options = options || {};
   options.headers = lowerHeaderKeys(options.headers);
   options.headers['user-agent'] =
@@ -56,6 +52,10 @@ module.exports = {
     conf = conf || {};
     conf.components = conf.components || {};
     conf.cache = conf.cache || {};
+    conf.templates = conf.templates || [
+      'oc-template-handlebars',
+      'oc-template-jade'
+    ];
 
     return conf;
   },
