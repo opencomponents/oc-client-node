@@ -49,13 +49,14 @@ const sanitiseDefaultOptions = function(options, config) {
 
 module.exports = {
   sanitiseConfiguration: function(conf) {
+    const baseTemplates = ['oc-template-handlebars', 'oc-template-jade'];
+
     conf = conf || {};
     conf.components = conf.components || {};
     conf.cache = conf.cache || {};
-    conf.templates = conf.templates || [
-      'oc-template-handlebars',
-      'oc-template-jade'
-    ];
+    conf.templates = conf.templates
+      ? _.uniq(conf.templates.concat(baseTemplates))
+      : baseTemplates;
 
     return conf;
   },

@@ -52,6 +52,16 @@ const _ = {
     }
 
     return input;
+  },
+  uniq: function(array) {
+    const seen = {};
+    return input.reduce((uniques, element) => {
+      if (seen[element] !== element) {
+        seen[element] = element;
+        uniques = uniques.concat(element);
+      }
+      return uniques;
+    }, []);
   }
 };
 
