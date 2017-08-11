@@ -36,17 +36,17 @@
     "cheerio": "0.22.0",
     "injectr": "0.5.1",
     "mocha": "^3.0.2",
-    "oc": "^0.38.8",
-    "sinon": "^1.17.5",
+    "oc": "^0.40.3",
+    "sinon": "^3.1.0",
     "husky": "^0.14.3",
     "prettier-eslint-cli": "^4.1.1",
-    "lint-staged": "^3.6.0"
+    "lint-staged": "^4.0.3"
   },
   "dependencies": {
     "minimal-request": "2.2.0",
     "nice-cache": "0.0.5",
-    "oc-client-browser": "1.0.1",
-    "oc-template-handlebars": "6.0.1",
+    "oc-client-browser": "1.0.2",
+    "oc-template-handlebars": "6.0.2",
     "oc-template-jade": "6.0.1",
     "stringformat": "0.0.5"
   },
