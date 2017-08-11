@@ -25,15 +25,27 @@ const getDefaultUserAgent = function() {
   );
 };
 
-const sanitiseDefaultOptions = function(options) {
+const getTemplatesInfo = templates =>
+  templates.reduce((templatesHash, template) => {
+    templatesHash[template] = require(template).getInfo().version;
+    return templatesHash;
+  }, {});
+
+const sanitiseDefaultOptions = function(options, config) {
   if (_.isFunction(options)) {
     options = {};
   }
-
+  config = config || {};
+  config.templates = config.templates || [
+    'oc-template-handlebars',
+    'oc-template-jade'
+  ];
   options = options || {};
   options.headers = lowerHeaderKeys(options.headers);
   options.headers['user-agent'] =
     options.headers['user-agent'] || getDefaultUserAgent();
+  options.headers.templates =
+    options.headers.templates || getTemplatesInfo(config.templates);
 
   options.timeout = options.timeout || 5;
   return options;
@@ -49,7 +61,7 @@ module.exports = {
   },
 
   sanitiseGlobalRenderOptions: function(options, config) {
-    options = sanitiseDefaultOptions(options);
+    options = sanitiseDefaultOptions(options, config);
     options.headers.accept = 'application/vnd.oc.unrendered+json';
 
     options.container = options.container === true ? true : false;
@@ -62,8 +74,8 @@ module.exports = {
     return options;
   },
 
-  sanitiseGlobalGetInfoOptions: function(options) {
-    options = sanitiseDefaultOptions(options);
+  sanitiseGlobalGetInfoOptions: function(options, config) {
+    options = sanitiseDefaultOptions(options, config);
     options.headers.accept = 'application/vnd.oc.info+json';
     return options;
   }
