@@ -44,7 +44,7 @@ const sanitiseDefaultOptions = function(options, config) {
     options.headers.templates || getTemplatesInfo(config.templates);
 
   options.timeout = options.timeout || 5;
-  return options;
+  return Object.assign({}, options);
 };
 
 module.exports = {
@@ -59,7 +59,7 @@ module.exports = {
       ? _.uniq(conf.templates.concat(baseTemplates))
       : baseTemplates;
 
-    return conf;
+    return Object.assign({}, conf);
   },
 
   sanitiseGlobalRenderOptions: function(options, config) {
