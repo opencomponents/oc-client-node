@@ -55,13 +55,16 @@ const _ = {
   },
   uniq: function(array) {
     const seen = {};
-    return array.reduce((uniques, element) => {
+    let uniques = [];
+
+    for (let i = 0; i < array.length; i++) {
+      const element = array[i];
       if (seen[element] !== element) {
         seen[element] = element;
         uniques = uniques.concat(element);
       }
-      return uniques;
-    }, []);
+    }
+    return uniques;
   }
 };
 

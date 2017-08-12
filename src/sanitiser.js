@@ -35,29 +35,29 @@ const sanitiseDefaultOptions = function(options, config) {
   if (_.isFunction(options)) {
     options = {};
   }
-  const copy = Object.assign({}, options);
-  copy.headers = lowerHeaderKeys(copy.headers);
-  copy.headers['user-agent'] =
-    copy.headers['user-agent'] || getDefaultUserAgent();
-  copy.headers.templates =
-    copy.headers.templates || getTemplatesInfo(config.templates);
+  const optionsCopy = Object.assign({}, options);
+  optionsCopy.headers = lowerHeaderKeys(optionsCopy.headers);
+  optionsCopy.headers['user-agent'] =
+    optionsCopy.headers['user-agent'] || getDefaultUserAgent();
+  optionsCopy.headers.templates =
+    optionsCopy.headers.templates || getTemplatesInfo(config.templates);
 
-  copy.timeout = copy.timeout || 5;
-  return copy;
+  optionsCopy.timeout = optionsCopy.timeout || 5;
+  return optionsCopy;
 };
 
 module.exports = {
   sanitiseDefaultOptions,
   sanitiseConfiguration: function(conf) {
     const baseTemplates = ['oc-template-handlebars', 'oc-template-jade'];
-    const copy = Object.assign({}, conf);
-    copy.components = copy.components || {};
-    copy.cache = copy.cache || {};
-    copy.templates = copy.templates
-      ? _.uniq(copy.templates.concat(baseTemplates))
+    const confCopy = Object.assign({}, conf);
+    confCopy.components = confCopy.components || {};
+    confCopy.cache = confCopy.cache || {};
+    confCopy.templates = confCopy.templates
+      ? _.uniq(confCopy.templates.concat(baseTemplates))
       : baseTemplates;
 
-    return copy;
+    return confCopy;
   },
 
   sanitiseGlobalRenderOptions: function(options, config) {
