@@ -3,10 +3,7 @@
 const format = require('stringformat');
 const request = require('minimal-request');
 
-const {
-  sanitiseDefaultOptions,
-  sanitiseConfiguration
-} = require('./sanitiser');
+const sanitiser = require('./sanitiser');
 const settings = require('./settings');
 const _ = require('./utils/helpers');
 
@@ -14,8 +11,8 @@ module.exports = function(config, renderComponents) {
   return function(options, cb) {
     cb = cb || _.noop;
 
-    config = sanitiseConfiguration(config);
-    options = sanitiseDefaultOptions(options, config);
+    config = sanitiser.sanitiseConfiguration(config);
+    options = sanitiser.sanitiseDefaultOptions(options, config);
 
     if (!config || !config.registries || !config.registries.serverRendering) {
       return cb(null, {});
