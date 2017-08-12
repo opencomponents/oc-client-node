@@ -48,6 +48,7 @@ const sanitiseDefaultOptions = function(options, config) {
 };
 
 module.exports = {
+  sanitiseDefaultOptions,
   sanitiseConfiguration: function(conf) {
     const baseTemplates = ['oc-template-handlebars', 'oc-template-jade'];
 

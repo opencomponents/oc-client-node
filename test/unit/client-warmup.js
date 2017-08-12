@@ -3,6 +3,9 @@
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
+const handlebarsTemplateVersion = require('oc-template-handlebars').getInfo()
+  .version;
+const jadeTemplateVersion = require('oc-template-jade').getInfo().version;
 
 describe('client : warmup', () => {
   let Warmup, requestStub;
@@ -164,7 +167,14 @@ describe('client : warmup', () => {
       const expectedRequest = {
         url: 'https://my-registry.com/component1/~info',
         json: true,
-        headers: { 'Accept-Language': 'en-US' },
+        headers: {
+          'accept-language': 'en-US',
+          'user-agent': 'oc-client-2.1.22/v8.2.1-darwin-x64',
+          templates: {
+            'oc-template-handlebars': handlebarsTemplateVersion,
+            'oc-template-jade': jadeTemplateVersion
+          }
+        },
         method: 'GET',
         timeout: 5
       };
