@@ -3,9 +3,21 @@
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
+const format = require('stringformat');
+
 const handlebarsTemplateVersion = require('oc-template-handlebars').getInfo()
   .version;
 const jadeTemplateVersion = require('oc-template-jade').getInfo().version;
+
+const getDefaultUserAgent = function() {
+  return format(
+    'oc-client-{0}/{1}-{2}-{3}',
+    require('../../package.json').version,
+    process.version,
+    process.platform,
+    process.arch
+  );
+};
 
 describe('client : warmup', () => {
   let Warmup, requestStub;
@@ -169,7 +181,7 @@ describe('client : warmup', () => {
         json: true,
         headers: {
           'accept-language': 'en-US',
-          'user-agent': 'oc-client-2.1.22/v8.2.1-darwin-x64',
+          'user-agent': getDefaultUserAgent(),
           templates: {
             'oc-template-handlebars': handlebarsTemplateVersion,
             'oc-template-jade': jadeTemplateVersion
