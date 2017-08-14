@@ -59,4 +59,31 @@ describe('client : render-components', () => {
       expect(toDo[0].failover).to.equal(true);
     });
   });
+
+  describe('when server return a rendered component instead', () => {
+    const getCompiledTemplateStub = sinon.spy();
+    let toDo;
+
+    before(done => {
+      initialise(getCompiledTemplateStub);
+
+      toDo = [
+        {
+          render: 'server',
+          apiResponse: {
+            renderMode: 'rendered',
+            html: '<div>Hello</div>'
+          },
+          result: {}
+        }
+      ];
+
+      renderComponents(toDo, {}, done);
+    });
+
+    it('should correctly handle it', () => {
+      expect(toDo[0].result.html).to.equal('<div>Hello</div>');
+      expect(getCompiledTemplateStub.notCalled).to.equal(true);
+    });
+  });
 });

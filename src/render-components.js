@@ -10,6 +10,10 @@ module.exports = function(cache, renderTemplate) {
   const getCompiledTemplate = new GetCompiledTemplate(cache);
 
   const fetchTemplateAndRender = function(component, options, cb) {
+    if (component.renderMode === 'rendered') {
+      return cb(null, component.html);
+    }
+
     const data = component.data,
       isLocal = component.type === 'oc-component-local',
       useCache = !isLocal;
