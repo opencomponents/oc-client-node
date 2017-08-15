@@ -54,17 +54,13 @@ const _ = {
     return input;
   },
   uniq: function(array) {
-    const seen = {};
-    let uniques = [];
+    let uniques = {};
 
     for (let i = 0; i < array.length; i++) {
-      const element = array[i];
-      if (seen[element] !== element) {
-        seen[element] = element;
-        uniques = uniques.concat(element);
-      }
+      uniques[array[i]] = true;
     }
-    return uniques;
+
+    return Object.keys(uniques);
   }
 };
 
