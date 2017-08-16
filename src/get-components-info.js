@@ -17,7 +17,7 @@ module.exports = function(config) {
       callback = options;
     }
 
-    options = sanitiser.sanitiseGlobalGetInfoOptions(options);
+    options = sanitiser.sanitiseGlobalGetInfoOptions(options, config);
 
     let serverRenderingEndpoint;
     if (

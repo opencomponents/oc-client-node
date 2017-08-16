@@ -25,31 +25,43 @@ const getDefaultUserAgent = function() {
   );
 };
 
-const sanitiseDefaultOptions = function(options) {
+const getTemplatesInfo = templates =>
+  templates.reduce((templatesHash, template) => {
+    templatesHash[template] = require(template).getInfo().version;
+    return templatesHash;
+  }, {});
+
+const sanitiseDefaultOptions = function(options, config) {
   if (_.isFunction(options)) {
     options = {};
   }
+  const optionsCopy = Object.assign({}, options);
+  optionsCopy.headers = lowerHeaderKeys(optionsCopy.headers);
+  optionsCopy.headers['user-agent'] =
+    optionsCopy.headers['user-agent'] || getDefaultUserAgent();
+  optionsCopy.headers.templates =
+    optionsCopy.headers.templates || getTemplatesInfo(config.templates);
 
-  options = options || {};
-  options.headers = lowerHeaderKeys(options.headers);
-  options.headers['user-agent'] =
-    options.headers['user-agent'] || getDefaultUserAgent();
-
-  options.timeout = options.timeout || 5;
-  return options;
+  optionsCopy.timeout = optionsCopy.timeout || 5;
+  return optionsCopy;
 };
 
 module.exports = {
+  sanitiseDefaultOptions,
   sanitiseConfiguration: function(conf) {
-    conf = conf || {};
-    conf.components = conf.components || {};
-    conf.cache = conf.cache || {};
+    const baseTemplates = ['oc-template-handlebars', 'oc-template-jade'];
+    const confCopy = Object.assign({}, conf);
+    confCopy.components = confCopy.components || {};
+    confCopy.cache = confCopy.cache || {};
+    confCopy.templates = confCopy.templates
+      ? _.uniq(confCopy.templates.concat(baseTemplates))
+      : baseTemplates;
 
-    return conf;
+    return confCopy;
   },
 
   sanitiseGlobalRenderOptions: function(options, config) {
-    options = sanitiseDefaultOptions(options);
+    options = sanitiseDefaultOptions(options, config);
     options.headers.accept = 'application/vnd.oc.unrendered+json';
 
     options.container = options.container === true ? true : false;
@@ -62,8 +74,8 @@ module.exports = {
     return options;
   },
 
-  sanitiseGlobalGetInfoOptions: function(options) {
-    options = sanitiseDefaultOptions(options);
+  sanitiseGlobalGetInfoOptions: function(options, config) {
+    options = sanitiseDefaultOptions(options, config);
     options.headers.accept = 'application/vnd.oc.info+json';
     return options;
   }

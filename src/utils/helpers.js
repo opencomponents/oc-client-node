@@ -52,6 +52,15 @@ const _ = {
     }
 
     return input;
+  },
+  uniq: function(array) {
+    let uniques = {};
+
+    for (let i = 0; i < array.length; i++) {
+      uniques[array[i]] = true;
+    }
+
+    return Object.keys(uniques);
   }
 };
 
