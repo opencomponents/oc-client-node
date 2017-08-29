@@ -233,10 +233,7 @@ describe('The node.js OC client', () => {
           method: 'post',
           headers: {
             'user-agent': 'oc-client-(.*?)',
-            templates: {
-              'oc-template-handlebars': '6.0.2',
-              'oc-template-jade': '6.0.1'
-            },
+            templates: 'oc-template-handlebars,6.0.2;oc-template-jade,6.0.1',
             accept: 'application/vnd.oc.unrendered+json'
           },
           timeout: 5,
@@ -660,10 +657,7 @@ describe('The node.js OC client', () => {
         method: 'get',
         headers: {
           'user-agent': 'oc-client-(.*?)',
-          templates: {
-            'oc-template-handlebars': '6.0.2',
-            'oc-template-jade': '6.0.1'
-          },
+          templates: 'oc-template-handlebars,6.0.2;oc-template-jade,6.0.1',
           accept: 'application/vnd.oc.unrendered+json'
         },
         timeout: 5,
@@ -786,10 +780,7 @@ describe('The node.js OC client', () => {
             headers: {
               'accept-language': 'da, en-gb;q=0.8, en;q=0.7',
               'user-agent': 'oc-client-(.*?)',
-              templates: {
-                'oc-template-handlebars': '6.0.2',
-                'oc-template-jade': '6.0.1'
-              },
+              templates: 'oc-template-handlebars,6.0.2;oc-template-jade,6.0.1',
               accept: 'application/vnd.oc.unrendered+json'
             },
             timeout: 5,
@@ -831,10 +822,7 @@ describe('The node.js OC client', () => {
           method: 'get',
           headers: {
             'user-agent': 'oc-client-(.*?)',
-            templates: {
-              'oc-template-handlebars': '6.0.2',
-              'oc-template-jade': '6.0.1'
-            },
+            templates: 'oc-template-handlebars,6.0.2;oc-template-jade,6.0.1',
             accept: 'application/vnd.oc.unrendered+json'
           },
           timeout: 5,
@@ -867,10 +855,7 @@ describe('The node.js OC client', () => {
           method: 'get',
           headers: {
             'user-agent': 'oc-client-(.*?)',
-            templates: {
-              'oc-template-handlebars': '6.0.2',
-              'oc-template-jade': '6.0.1'
-            },
+            templates: 'oc-template-handlebars,6.0.2;oc-template-jade,6.0.1',
             accept: 'application/vnd.oc.unrendered+json'
           },
           timeout: 0.01,
@@ -992,10 +977,7 @@ describe('The node.js OC client', () => {
         method: 'post',
         headers: {
           'user-agent': 'oc-client-(.*?)',
-          templates: {
-            'oc-template-handlebars': '6.0.2',
-            'oc-template-jade': '6.0.1'
-          },
+          templates: 'oc-template-handlebars,6.0.2;oc-template-jade,6.0.1',
           accept: 'application/vnd.oc.info+json'
         },
         timeout: 5,
