@@ -36,7 +36,7 @@ It will create an instance of the client. Options:
 |`registries`|`object`|yes|The registries' endpoints|
 |`registries.serverRendering`|`string`|no|The baseUrl for server-side rendering requests|
 |`registries.clientRendering`|`string`|no|The baseUrl for client-side rendering requests|
-|`templates`|`array`|no|The templates available to the client, will extend the default: ['oc-template-handlebars', 'oc-template-jade']|
+|`templates`|`array`|no|The templates available to the client, will extend the default: [require('oc-template-handlebars'), require('oc-template-jade')]|
 
 Example:
 
