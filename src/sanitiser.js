@@ -26,10 +26,10 @@ const getDefaultUserAgent = function() {
 };
 
 const getTemplatesInfo = templates =>
-  templates.reduce((templatesHash, template) => {
-    templatesHash[template] = require(template).getInfo().version;
-    return templatesHash;
-  }, {});
+  templates.map(template => {
+    const info = template.getInfo();
+    return `${info.type},${info.version}`;
+  });
 
 const sanitiseDefaultOptions = function(options, config) {
   if (_.isFunction(options)) {
@@ -40,7 +40,7 @@ const sanitiseDefaultOptions = function(options, config) {
   optionsCopy.headers['user-agent'] =
     optionsCopy.headers['user-agent'] || getDefaultUserAgent();
   optionsCopy.headers.templates =
-    optionsCopy.headers.templates || getTemplatesInfo(config.templates);
+    optionsCopy.headers.templates || config.templates;
 
   optionsCopy.timeout = optionsCopy.timeout || 5;
   return optionsCopy;
@@ -49,13 +49,18 @@ const sanitiseDefaultOptions = function(options, config) {
 module.exports = {
   sanitiseDefaultOptions,
   sanitiseConfiguration: function(conf) {
-    const baseTemplates = ['oc-template-handlebars', 'oc-template-jade'];
+    const baseTemplates = [
+      require('oc-template-handlebars'),
+      require('oc-template-jade')
+    ];
     const confCopy = Object.assign({}, conf);
     confCopy.components = confCopy.components || {};
     confCopy.cache = confCopy.cache || {};
     confCopy.templates = confCopy.templates
-      ? _.uniq(confCopy.templates.concat(baseTemplates))
-      : baseTemplates;
+      ? _.uniq(getTemplatesInfo(confCopy.templates.concat(baseTemplates))).join(
+          ';'
+        )
+      : getTemplatesInfo(baseTemplates).join(';');
 
     return confCopy;
   },
