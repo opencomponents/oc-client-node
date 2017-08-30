@@ -182,10 +182,7 @@ describe('client : warmup', () => {
         headers: {
           'accept-language': 'en-US',
           'user-agent': getDefaultUserAgent(),
-          templates: {
-            'oc-template-handlebars': handlebarsTemplateVersion,
-            'oc-template-jade': jadeTemplateVersion
-          }
+          templates: `oc-template-handlebars,${handlebarsTemplateVersion};oc-template-jade,${jadeTemplateVersion}`
         },
         method: 'GET',
         timeout: 5
