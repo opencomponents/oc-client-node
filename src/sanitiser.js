@@ -56,11 +56,13 @@ module.exports = {
     const confCopy = Object.assign({}, conf);
     confCopy.components = confCopy.components || {};
     confCopy.cache = confCopy.cache || {};
-    confCopy.templates = confCopy.templates
-      ? _.uniq(getTemplatesInfo(confCopy.templates.concat(baseTemplates))).join(
-          ';'
-        )
-      : getTemplatesInfo(baseTemplates).join(';');
+    if (confCopy.templates && Array.isArray(confCopy.templates)) {
+      confCopy.templates = _.uniq(
+        getTemplatesInfo(confCopy.templates.concat(baseTemplates))
+      ).join(';');
+    } else if (!confCopy.templates) {
+      confCopy.templates = getTemplatesInfo(baseTemplates).join(';');
+    }
 
     return confCopy;
   },
