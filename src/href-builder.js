@@ -67,7 +67,8 @@ module.exports = function(config) {
 
     prepareServerGet: function(baseUrl, component, options) {
       const urlPath =
-        component.name + (component.version ? '/' + component.version : '');
+        component.name +
+        (component.version ? '/' + component.version.replace(/^\^/, '') : '');
 
       let qs = '';
       if (component.parameters || options.parameters) {
