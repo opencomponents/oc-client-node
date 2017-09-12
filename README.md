@@ -61,6 +61,7 @@ It will warmup the components that have been declared during the instantiation. 
 |---------|----|---------|-----------|
 |`headers`|`object`|no|An object containing all the headers that must be forwarded to the components' requests|
 |`timeout`|`number` (seconds)|no|Default 5. Maximum amount of time to wait during requests|
+|`renderComponents`|`function`|no|A function to renderComponents on warmup. Defaults to client own implementation|
 
 Example:
 
