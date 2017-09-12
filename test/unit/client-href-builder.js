@@ -87,9 +87,11 @@ describe('client : href-builder :', () => {
       });
     });
 
-    describe('when some of the paramaters are falsy', () => {
-      it('it should return a valid request for the component with the truthy parameters set as URL query params', () => {
-        const options = { parameters: { p1: null, p2: undefined, p3: 'v3' } };
+    describe('when some of the paramaters are undefined or null', () => {
+      it('it should return a valid request for the component with the valid params set as URL query params', () => {
+        const options = {
+          parameters: { p1: null, p2: undefined, p3: 'v3', p4: 0, p5: false }
+        };
         const component = { name: 'hello-world', version: '1.0.0' };
         const hrefBuilder = new hrefBuilderPrototype({});
 
@@ -99,7 +101,9 @@ describe('client : href-builder :', () => {
             component,
             options
           )
-        ).to.equal('http://localhost:3030/hello-world/1.0.0/?p3=v3');
+        ).to.equal(
+          'http://localhost:3030/hello-world/1.0.0/?p3=v3&p4=0&p5=false'
+        );
       });
     });
 

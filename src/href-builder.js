@@ -67,9 +67,9 @@ module.exports = function(config) {
     },
 
     prepareServerGet: function(baseUrl, component, options) {
+      const predicate = value => value !== undefined && value !== null;
       const urlPath =
-        component.name +
-        (component.version ? '/' + component.version.replace(/^\^/, '') : '');
+        component.name + (component.version ? '/' + component.version : '');
 
       let qs = '';
       if (component.parameters || options.parameters) {
@@ -77,8 +77,8 @@ module.exports = function(config) {
           '/?' +
           querystring.stringify(
             mergeObjects(
-              _.pick(component.parameters, Boolean),
-              _.pick(options.parameters, Boolean)
+              _.pick(component.parameters, predicate),
+              _.pick(options.parameters, predicate)
             )
           );
       }
