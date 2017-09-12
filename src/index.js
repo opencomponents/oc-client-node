@@ -22,6 +22,7 @@ module.exports = function(conf) {
 
   return {
     init: function(options, callback) {
+      const renderComponents = options.renderComponents || renderComponents;
       const warmup = new Warmup(config, renderComponents);
       return warmup(options, callback);
     },
