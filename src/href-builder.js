@@ -4,6 +4,7 @@ const querystring = require('querystring');
 const url = require('url');
 const settings = require('./settings');
 const mergeObjects = require('./utils/merge-objects');
+const _ = require('./utils/helpers');
 
 module.exports = function(config) {
   return {
@@ -75,7 +76,10 @@ module.exports = function(config) {
         qs =
           '/?' +
           querystring.stringify(
-            mergeObjects(component.parameters, options.parameters)
+            mergeObjects(
+              _.pick(component.parameters, Boolean),
+              _.pick(options.parameters, Boolean)
+            )
           );
       }
 

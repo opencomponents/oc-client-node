@@ -87,6 +87,22 @@ describe('client : href-builder :', () => {
       });
     });
 
+    describe('when some of the paramaters are falsy', () => {
+      it('it should return a valid request for the component with the truthy parameters set as URL query params', () => {
+        const options = { parameters: { p1: null, p2: undefined, p3: 'v3' } };
+        const component = { name: 'hello-world', version: '1.0.0' };
+        const hrefBuilder = new hrefBuilderPrototype({});
+
+        expect(
+          hrefBuilder.prepareServerGet(
+            'http://localhost:3030',
+            component,
+            options
+          )
+        ).to.equal('http://localhost:3030/hello-world/1.0.0/?p3=v3');
+      });
+    });
+
     describe('when there are parameters in both "options" and "component"', () => {
       it('it should return a valid request for the component with the parameters set as URL query params', () => {
         const options = { parameters: { p1: 'v1', p2: 'v 2' } };

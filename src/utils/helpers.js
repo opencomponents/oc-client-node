@@ -61,6 +61,19 @@ const _ = {
     }
 
     return Object.keys(uniques);
+  },
+  pick: function(obj, predicate) {
+    if (!obj) {
+      return obj;
+    }
+    const result = {};
+
+    Object.keys(obj).forEach(function(key) {
+      if (predicate(obj[key])) {
+        result[key] = obj[key];
+      }
+    });
+    return result;
   }
 };
 
