@@ -17,3 +17,13 @@ describe('_.uniq', () => {
     });
   });
 });
+
+describe('_.pick', () => {
+  describe('when an object contain values that do not match a predicate', () => {
+    it('should return an new object only containing the matching values', () => {
+      expect(
+        _.pick({ a: 'something', b: null, c: undefined, d: NaN }, Boolean)
+      ).to.deep.equal({ a: 'something' });
+    });
+  });
+});
