@@ -67,7 +67,7 @@ module.exports = function(config) {
     },
 
     prepareServerGet: function(baseUrl, component, options) {
-      const predicate = value => value !== undefined && value !== null;
+      const predicate = value => value !== undefined;
       const urlPath =
         component.name + (component.version ? '/' + component.version : '');
 
