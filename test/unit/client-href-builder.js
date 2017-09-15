@@ -90,7 +90,7 @@ describe('client : href-builder :', () => {
     describe('when some of the paramaters are undefined or null', () => {
       it('it should return a valid request for the component with the valid params set as URL query params', () => {
         const options = {
-          parameters: { p1: null, p2: undefined, p3: 'v3', p4: 0, p5: false }
+          parameters: { p1: undefined, p2: 'v2', p3: 0, p4: false }
         };
         const component = { name: 'hello-world', version: '1.0.0' };
         const hrefBuilder = new hrefBuilderPrototype({});
@@ -102,7 +102,7 @@ describe('client : href-builder :', () => {
             options
           )
         ).to.equal(
-          'http://localhost:3030/hello-world/1.0.0/?p3=v3&p4=0&p5=false'
+          'http://localhost:3030/hello-world/1.0.0/?p2=v2&p3=0&p4=false'
         );
       });
     });
