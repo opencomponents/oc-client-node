@@ -17,29 +17,36 @@ function isValidTemplate(template) {
   );
 }
 
+function getOcTemplate(path) {
+  if (require.cache && !!require.cache[path]) {
+    delete require.cache[path];
+  }
+  return require(path);
+}
+
 module.exports = function(template) {
   let ocTemplate;
+
   const localTemplate = path.join(
     __dirname,
     '../../../',
     'node_modules',
     template
   );
+
   const relativeTemplate = path.resolve('.', 'node_modules', template);
 
   try {
-    if (require.cache && !!require.cache[localTemplate]) {
-      delete require.cache[localTemplate];
-    }
-    ocTemplate = require(localTemplate);
+    ocTemplate = getOcTemplate(template);
   } catch (err) {
     try {
-      if (require.cache && !!require.cache[relativeTemplate]) {
-        delete require.cache[relativeTemplate];
-      }
-      ocTemplate = require(relativeTemplate);
+      ocTemplate = getOcTemplate(localTemplate);
     } catch (err) {
-      throw format(templateNotFound, template);
+      try {
+        ocTemplate = getOcTemplate(relativeTemplate);
+      } catch (err) {
+        throw format(templateNotFound, template);
+      }
     }
   }
 
