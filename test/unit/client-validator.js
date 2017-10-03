@@ -31,5 +31,29 @@ describe('client : validator', () => {
         );
       });
     });
+
+    describe('when registries contains serverRendering only', () => {
+      const result = validator.validateConfiguration({
+        registries: {
+          serverRendering: 'http://localhost:3030'
+        }
+      });
+
+      it('should pass', () => {
+        expect(result.isValid).to.be.true;
+      });
+    });
+
+    describe('when registries contains clientRendering only', () => {
+      const result = validator.validateConfiguration({
+        registries: {
+          clientRendering: 'http://localhost:3030'
+        }
+      });
+
+      it('should pass', () => {
+        expect(result.isValid).to.be.true;
+      });
+    });
   });
 });
