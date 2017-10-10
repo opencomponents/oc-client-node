@@ -45,7 +45,7 @@
   "dependencies": {
     "minimal-request": "2.2.0",
     "nice-cache": "0.0.5",
-    "oc-client-browser": "1.0.4",
+    "oc-client-browser": "1.1.0",
     "oc-template-handlebars": "6.0.7",
     "oc-template-jade": "6.0.9",
     "stringformat": "0.0.5"
