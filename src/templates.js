@@ -1,14 +1,16 @@
 'use strict';
 
 module.exports = {
-  clientScript: '<script class="ocClientScript">{0}</script>{1}',
+  clientScript: ({ clientJs, unrenderedComponentTag }) =>
+    `<script class="ocClientScript">${clientJs}</script>${unrenderedComponentTag}`,
 
-  componentTag:
-    '<oc-component href="{0}" data-hash="{1}" data-name="{2}" data-rendered="true" data-version="{3}">{4}</oc-component>',
+  componentTag: ({ href, html, key, name, version }) =>
+    `<oc-component href="${href}" data-hash="${key}" data-name="${name ||
+      ''}" data-rendered="true" data-version="${version}">${html}</oc-component>`,
 
-  componentUnrenderedTag: '<oc-component href="{0}"></oc-component>',
+  componentUnrenderedTag: ({ href }) =>
+    `<oc-component href="${href}"></oc-component>`,
 
-  renderInfo:
-    '<script>window.oc=window.oc||{};oc.renderedComponents=oc.renderedComponents||{};' +
-    'oc.renderedComponents["{0}"]="{1}";</script>'
+  renderInfo: ({ name, version }) =>
+    `<script>window.oc=window.oc||{};oc.renderedComponents=oc.renderedComponents||{};oc.renderedComponents["${name}"]="${version}";</script>`
 };
