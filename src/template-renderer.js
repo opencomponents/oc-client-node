@@ -3,7 +3,7 @@
 const htmlRenderer = require('./html-renderer');
 const requireTemplate = require('./utils/require-template');
 
-const isTemplateLegacy = t => !!{ handlebars: true, jade: true }[t];
+const isTemplateLegacy = t => t === 'handlebars' || t === 'jade';
 
 module.exports = function() {
   return function(template, model, options, callback) {
