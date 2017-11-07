@@ -1,7 +1,5 @@
 'use strict';
 
-const format = require('stringformat');
-
 const GetOCClientScript = require('./get-oc-client-script');
 const HrefBuilder = require('./href-builder');
 const htmlRenderer = require('./html-renderer');
@@ -48,11 +46,10 @@ module.exports = function(cache, config) {
             );
 
             if (action.failover) {
-              action.result.html = format(
-                templates.clientScript,
+              action.result.html = templates.clientScript({
                 clientJs,
                 unrenderedComponentTag
-              );
+              });
             } else {
               action.result.error = null;
               action.result.html = unrenderedComponentTag;

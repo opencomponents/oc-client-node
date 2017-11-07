@@ -1,29 +1,19 @@
 'use strict';
 
-const format = require('stringformat');
-
 const templates = require('./templates');
 
 module.exports = {
-  renderedComponent: function(data) {
+  renderedComponent: data => {
     if (!!data.name && data.renderInfo !== false) {
-      data.html += format(templates.renderInfo, data.name, data.version);
+      data.html += templates.renderInfo(data);
     }
 
     if (data.container !== false) {
-      data.html = format(
-        templates.componentTag,
-        data.href,
-        data.key,
-        data.name || '',
-        data.version,
-        data.html
-      );
+      data.html = templates.componentTag(data);
     }
 
     return data.html;
   },
-  unrenderedComponent: function(href) {
-    return href ? format(templates.componentUnrenderedTag, href) : '';
-  }
+  unrenderedComponent: href =>
+    href ? templates.componentUnrenderedTag({ href }) : ''
 };
