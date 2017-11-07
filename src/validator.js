@@ -17,7 +17,7 @@ module.exports = {
     } else if (
       !!conf.registries &&
       !conf.registries.serverRendering &&
-      !conf.clientRendering
+      !conf.registries.clientRendering
     ) {
       return errorMessage(settings.registriesEmpty);
     }

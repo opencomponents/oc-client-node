@@ -3,19 +3,20 @@
 const htmlRenderer = require('./html-renderer');
 const requireTemplate = require('./utils/require-template');
 
+const isTemplateLegacy = t => t === 'handlebars' || t === 'jade';
+
 module.exports = function() {
   return function(template, model, options, callback) {
-    let type = options.templateType;
-    if (type === 'jade') {
-      type = 'oc-template-jade';
-    }
-    if (type === 'handlebars') {
-      type = 'oc-template-handlebars';
+    const { key } = options;
+    let { templateType } = options;
+
+    if (isTemplateLegacy(templateType)) {
+      templateType = `oc-template-${templateType}`;
     }
 
     try {
-      const ocTemplate = requireTemplate(type);
-      ocTemplate.render({ template, model }, (err, html) => {
+      const ocTemplate = requireTemplate(templateType);
+      ocTemplate.render({ key, model, template }, (err, html) => {
         options.html = html;
         return callback(err, htmlRenderer.renderedComponent(options));
       });

@@ -1,6 +1,6 @@
 {
   "name": "oc-client",
-  "version": "2.1.25",
+  "version": "3.0.0",
   "description": "Node.js oc client",
   "main": "index.js",
   "repository": {
@@ -35,22 +35,22 @@
     "chai": "3.5.0",
     "cheerio": "0.22.0",
     "injectr": "0.5.1",
-    "mocha": "^3.0.2",
-    "oc": "^0.41.0",
-    "sinon": "^3.1.0",
+    "mocha": "^4.0.0",
+    "oc": "^0.41.16",
+    "sinon": "^4.0.0",
     "husky": "^0.14.3",
-    "prettier-eslint-cli": "^4.1.1",
-    "lint-staged": "^4.0.3"
+    "prettier-eslint-cli": "4.4.0",
+    "lint-staged": "^4.2.2"
   },
   "dependencies": {
     "minimal-request": "2.2.0",
     "nice-cache": "0.0.5",
-    "oc-client-browser": "1.0.2",
-    "oc-template-handlebars": "6.0.5",
-    "oc-template-jade": "6.0.4",
+    "oc-client-browser": "1.1.1",
+    "oc-template-handlebars": "6.0.8",
+    "oc-template-jade": "6.0.9",
     "stringformat": "0.0.5"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   }
 }

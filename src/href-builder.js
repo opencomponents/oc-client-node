@@ -4,6 +4,7 @@ const querystring = require('querystring');
 const url = require('url');
 const settings = require('./settings');
 const mergeObjects = require('./utils/merge-objects');
+const _ = require('./utils/helpers');
 
 module.exports = function(config) {
   return {
@@ -66,6 +67,7 @@ module.exports = function(config) {
     },
 
     prepareServerGet: function(baseUrl, component, options) {
+      const predicate = value => value !== undefined;
       const urlPath =
         component.name + (component.version ? '/' + component.version : '');
 
@@ -74,7 +76,10 @@ module.exports = function(config) {
         qs =
           '/?' +
           querystring.stringify(
-            mergeObjects(component.parameters, options.parameters)
+            mergeObjects(
+              _.pick(component.parameters, predicate),
+              _.pick(options.parameters, predicate)
+            )
           );
       }
 

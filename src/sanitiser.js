@@ -1,7 +1,5 @@
 'use strict';
 
-const format = require('stringformat');
-
 const packageInfo = require('../package');
 const _ = require('./utils/helpers');
 
@@ -15,15 +13,8 @@ const lowerHeaderKeys = function(headers) {
   return result;
 };
 
-const getDefaultUserAgent = function() {
-  return format(
-    'oc-client-{0}/{1}-{2}-{3}',
-    packageInfo.version,
-    process.version,
-    process.platform,
-    process.arch
-  );
-};
+const getDefaultUserAgent = () =>
+  `oc-client-${packageInfo.version}/${process.version}-${process.platform}-${process.arch}`;
 
 const getTemplatesInfo = templates =>
   templates.map(template => {
@@ -56,11 +47,13 @@ module.exports = {
     const confCopy = Object.assign({}, conf);
     confCopy.components = confCopy.components || {};
     confCopy.cache = confCopy.cache || {};
-    confCopy.templates = confCopy.templates
-      ? _.uniq(getTemplatesInfo(confCopy.templates.concat(baseTemplates))).join(
-          ';'
-        )
-      : getTemplatesInfo(baseTemplates).join(';');
+    if (confCopy.templates && Array.isArray(confCopy.templates)) {
+      confCopy.templates = _.uniq(
+        getTemplatesInfo(confCopy.templates.concat(baseTemplates))
+      ).join(';');
+    } else if (!confCopy.templates) {
+      confCopy.templates = getTemplatesInfo(baseTemplates).join(';');
+    }
 
     return confCopy;
   },

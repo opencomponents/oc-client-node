@@ -62,11 +62,14 @@ module.exports = function(cache, renderTemplate) {
 
         fetchTemplateAndRender(action.apiResponse, options, (err, html) => {
           if (err) {
-            const errorDetails = format(
-              '{0} ({1})',
-              err.response && err.response.error,
-              err.status
-            );
+            const genericError = !err.response;
+            const errorDetails = genericError
+              ? err
+              : format(
+                '{0} ({1})',
+                err.response && err.response.error,
+                err.status
+              );
             action.result.error = new Error(
               format(settings.serverSideRenderingFail, errorDetails)
             );
