@@ -5,9 +5,8 @@ const request = require('minimal-request');
 
 const settings = require('./settings');
 const TryGetCached = require('./try-get-cached');
-const requireTemplate = require('./utils/require-template');
 
-module.exports = function(cache) {
+module.exports = function(cache, templateModules) {
   const tryGetCached = new TryGetCached(cache);
 
   return function(template, useCache, timeout, callback) {
@@ -41,7 +40,7 @@ module.exports = function(cache) {
 
           let ocTemplate;
           try {
-            ocTemplate = requireTemplate(type);
+            ocTemplate = templateModules[type];
           } catch (err) {
             return callback(err);
           }

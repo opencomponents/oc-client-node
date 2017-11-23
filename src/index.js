@@ -10,11 +10,20 @@ const Warmup = require('./warmup');
 const _ = require('./utils/helpers');
 
 module.exports = function(conf) {
-  const config = sanitiser.sanitiseConfiguration(conf),
-    validationResult = validator.validateConfiguration(config),
-    renderTemplate = new TemplateRenderer(),
-    renderComponents = new ComponentsRenderer(config, renderTemplate),
-    getComponentsInfo = new GetComponentsInfo(config);
+  const config = sanitiser.sanitiseConfiguration(conf);
+  const validationResult = validator.validateConfiguration(config);
+  const templateModules = config.templates.reduce((hash, template) => {
+    hash[template.getInfo().type] = template;
+    return hash;
+  }, {});
+
+  const renderTemplate = new TemplateRenderer(templateModules);
+  const renderComponents = new ComponentsRenderer(
+    config,
+    renderTemplate,
+    templateModules
+  );
+  const getComponentsInfo = new GetComponentsInfo(config);
 
   if (!validationResult.isValid) {
     throw new Error(validationResult.error);
