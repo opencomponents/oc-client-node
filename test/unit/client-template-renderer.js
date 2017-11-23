@@ -4,7 +4,33 @@ const expect = require('chai').expect;
 const injectr = require('injectr');
 
 describe('client : template-renderer', () => {
-  let templateRenderer, error, result;
+  let error, result;
+  const TemplateRenderer = injectr('../../src/template-renderer.js', {
+    './html-renderer': {
+      renderedComponent: x => `<transformed>${x.html}</transformed>`
+    }
+  });
+
+  const templateModules = {
+    'working-template': {
+      render: (x, cb) => {
+        cb(null, '<div>hello</div>');
+      }
+    },
+    'braking-template': {
+      render: (x, cb) => {
+        cb(new Error('Ouch'));
+      }
+    },
+    'throwing-template': {
+      render: (x, cb) => {
+        throw new Error('Exception');
+        cb(err, res);
+      }
+    }
+  };
+
+  const templateRenderer = new TemplateRenderer(templateModules);
 
   const next = done => (err, res) => {
     error = err;
@@ -12,28 +38,14 @@ describe('client : template-renderer', () => {
     done();
   };
 
-  const initialise = (err, res, exception) => {
-    const TemplateRenderer = injectr('../../src/template-renderer.js', {
-      './utils/require-template': () => ({
-        render: (x, cb) => {
-          if (exception) {
-            throw exception;
-          }
-          cb(err, res);
-        }
-      }),
-      './html-renderer': {
-        renderedComponent: x => `<transformed>${x.html}</transformed>`
-      }
-    });
-
-    templateRenderer = new TemplateRenderer();
-  };
-
   describe('when rendering template succeeds', () => {
     beforeEach(done => {
-      initialise(null, '<div>hello</div>');
-      templateRenderer(null, null, { templateType: 'blargh' }, next(done));
+      templateRenderer(
+        null,
+        null,
+        { templateType: 'working-template' },
+        next(done)
+      );
     });
 
     it('should not error', () => {
@@ -47,23 +59,31 @@ describe('client : template-renderer', () => {
 
   describe('when rendering template fails', () => {
     beforeEach(done => {
-      initialise(new Error('blabla'));
-      templateRenderer(null, null, { templateType: 'blargh' }, next(done));
+      templateRenderer(
+        null,
+        null,
+        { templateType: 'braking-template' },
+        next(done)
+      );
     });
 
     it('should return error', () => {
-      expect(error.toString()).to.contain('blabla');
+      expect(error.toString()).to.contain('Ouch');
     });
   });
 
   describe('when rendering template throws an error', () => {
     beforeEach(done => {
-      initialise(null, null, new Error('exception'));
-      templateRenderer(null, null, { templateType: 'blargh' }, next(done));
+      templateRenderer(
+        null,
+        null,
+        { templateType: 'throwing-template' },
+        next(done)
+      );
     });
 
     it('should catch and return error', () => {
-      expect(error.toString()).to.contain('exception');
+      expect(error.toString()).to.contain('Exception');
     });
   });
 });
