@@ -8,11 +8,15 @@ const RenderComponents = require('./render-components');
 const sanitiser = require('./sanitiser');
 const _ = require('./utils/helpers');
 
-module.exports = function(config, renderTemplate) {
-  const cache = new Cache(config.cache),
-    getComponentsData = new GetComponentsData(config),
-    renderComponents = new RenderComponents(cache, renderTemplate),
-    processClientReponses = new ProcessClientResponse(cache, config);
+module.exports = function(config, renderTemplate, templatesModules) {
+  const cache = new Cache(config.cache);
+  const getComponentsData = new GetComponentsData(config);
+  const renderComponents = new RenderComponents(
+    cache,
+    renderTemplate,
+    templatesModules
+  );
+  const processClientReponses = new ProcessClientResponse(cache, config);
 
   return function(components, options, callback) {
     options = sanitiser.sanitiseGlobalRenderOptions(options, config);

@@ -13,6 +13,8 @@ module.exports = {
   missingComponentName: 'The component name is missing',
   registriesEmpty: 'registries must contain at least one endpoint',
   registriesIsNotObject: 'registries must be an object',
+  templatesIsNotArray: 'templates must be an array',
+  templateIsNotValid: 'all templates must be a valid template package',
   serverSideRenderingFail: 'Server-side rendering failed: {0}',
   warmupFailed: 'Error warming up oc-client: request {0} failed ({1})',
   gettingTemplateFailed: 'Error requiring template {0}'

@@ -16,11 +16,13 @@ const lowerHeaderKeys = function(headers) {
 const getDefaultUserAgent = () =>
   `oc-client-${packageInfo.version}/${process.version}-${process.platform}-${process.arch}`;
 
-const getTemplatesInfo = templates =>
-  templates.map(template => {
-    const info = template.getInfo();
-    return `${info.type},${info.version}`;
-  });
+const getTemplatesHeadersInfo = templates =>
+  templates
+    .map(template => {
+      const info = template.getInfo();
+      return `${info.type},${info.version}`;
+    })
+    .join(';');
 
 const sanitiseDefaultOptions = function(options, config) {
   if (_.isFunction(options)) {
@@ -31,7 +33,7 @@ const sanitiseDefaultOptions = function(options, config) {
   optionsCopy.headers['user-agent'] =
     optionsCopy.headers['user-agent'] || getDefaultUserAgent();
   optionsCopy.headers.templates =
-    optionsCopy.headers.templates || config.templates;
+    optionsCopy.headers.templates || getTemplatesHeadersInfo(config.templates);
 
   optionsCopy.timeout = optionsCopy.timeout || 5;
   return optionsCopy;
@@ -47,14 +49,10 @@ module.exports = {
     const confCopy = Object.assign({}, conf);
     confCopy.components = confCopy.components || {};
     confCopy.cache = confCopy.cache || {};
-    if (confCopy.templates && Array.isArray(confCopy.templates)) {
-      confCopy.templates = _.uniq(
-        getTemplatesInfo(confCopy.templates.concat(baseTemplates))
-      ).join(';');
-    } else if (!confCopy.templates) {
-      confCopy.templates = getTemplatesInfo(baseTemplates).join(';');
-    }
-
+    confCopy.templates = confCopy.templates || [];
+    confCopy.templates = _.uniqTemplates(
+      confCopy.templates.concat(baseTemplates)
+    );
     return confCopy;
   },
 

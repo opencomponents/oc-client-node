@@ -1,11 +1,10 @@
 'use strict';
 
 const htmlRenderer = require('./html-renderer');
-const requireTemplate = require('./utils/require-template');
 
 const isTemplateLegacy = t => t === 'handlebars' || t === 'jade';
 
-module.exports = function() {
+module.exports = function(templateModules) {
   return function(template, model, options, callback) {
     const { key } = options;
     let { templateType } = options;
@@ -15,7 +14,7 @@ module.exports = function() {
     }
 
     try {
-      const ocTemplate = requireTemplate(templateType);
+      const ocTemplate = templateModules[templateType];
       ocTemplate.render({ key, model, template }, (err, html) => {
         options.html = html;
         return callback(err, htmlRenderer.renderedComponent(options));

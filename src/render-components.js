@@ -6,8 +6,8 @@ const GetCompiledTemplate = require('./get-compiled-template');
 const settings = require('./settings');
 const _ = require('./utils/helpers');
 
-module.exports = function(cache, renderTemplate) {
-  const getCompiledTemplate = new GetCompiledTemplate(cache);
+module.exports = function(cache, renderTemplate, templateModules) {
+  const getCompiledTemplate = new GetCompiledTemplate(cache, templateModules);
 
   const fetchTemplateAndRender = function(component, options, cb) {
     if (component.renderMode === 'rendered') {

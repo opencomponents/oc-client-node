@@ -53,14 +53,18 @@ const _ = {
 
     return input;
   },
-  uniq: function(array) {
-    let uniques = {};
+  uniqTemplates: function(array) {
+    const uniqueTypes = [];
+    const uniques = [];
 
     for (let i = 0; i < array.length; i++) {
-      uniques[array[i]] = true;
+      const type = array[i].getInfo().type;
+      if (uniqueTypes.indexOf(type) < 0) {
+        uniqueTypes.push(type);
+        uniques.push(array[i]);
+      }
     }
-
-    return Object.keys(uniques);
+    return uniques;
   },
   pick: function(obj, predicate) {
     if (!obj) {
