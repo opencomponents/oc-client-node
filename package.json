@@ -1,6 +1,6 @@
 {
   "name": "oc-client",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Node.js oc client",
   "main": "index.js",
   "repository": {
@@ -39,13 +39,13 @@
     "oc": "^0.42.0",
     "sinon": "^4.0.0",
     "husky": "^0.14.3",
-    "prettier-eslint-cli": "4.4.0",
+    "prettier-eslint-cli": "4.4.1",
     "lint-staged": "^6.0.0"
   },
   "dependencies": {
     "minimal-request": "2.2.0",
     "nice-cache": "0.0.5",
-    "oc-client-browser": "1.1.2",
+    "oc-client-browser": "1.2.0",
     "oc-template-handlebars": "6.0.10",
     "oc-template-jade": "6.0.9",
     "stringformat": "0.0.5"
