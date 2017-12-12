@@ -39,7 +39,7 @@
     "oc": "^0.42.9",
     "sinon": "^4.0.0",
     "husky": "^0.14.3",
-    "prettier-eslint-cli": "4.4.1",
+    "prettier-eslint-cli": "4.4.3",
     "lint-staged": "^6.0.0"
   },
   "dependencies": {
