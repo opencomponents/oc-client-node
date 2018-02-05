@@ -47,7 +47,7 @@
     "nice-cache": "0.0.5",
     "oc-client-browser": "1.2.3",
     "oc-template-handlebars": "6.0.11",
-    "oc-template-jade": "6.0.9",
+    "oc-template-jade": "6.0.10",
     "stringformat": "0.0.5"
   },
   "engines": {
