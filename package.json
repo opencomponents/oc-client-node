@@ -40,7 +40,7 @@
     "sinon": "^4.0.0",
     "husky": "^0.14.3",
     "prettier-eslint-cli": "4.7.1",
-    "lint-staged": "^6.0.0"
+    "lint-staged": "^7.0.0"
   },
   "dependencies": {
     "minimal-request": "3.0.0",
