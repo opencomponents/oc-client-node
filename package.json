@@ -46,7 +46,7 @@
     "minimal-request": "3.0.0",
     "nice-cache": "0.0.5",
     "oc-client-browser": "1.3.0",
-    "oc-template-handlebars": "6.0.12",
+    "oc-template-handlebars": "6.0.13",
     "oc-template-jade": "6.0.11",
     "stringformat": "0.0.5"
   },
