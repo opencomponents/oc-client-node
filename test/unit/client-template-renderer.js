@@ -1,5 +1,6 @@
 'use strict';
 
+const emptyResponseHandler = require('oc-empty-response-handler');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 
@@ -38,11 +39,30 @@ describe('client : template-renderer', () => {
     done();
   };
 
+  describe('when rendering empty template', () => {
+    beforeEach(done => {
+      templateRenderer(
+        null,
+        { [emptyResponseHandler.viewModelEmptyKey]: true },
+        { templateType: 'working-template' },
+        next(done)
+      );
+    });
+
+    it('should not error', () => {
+      expect(error).to.be.null;
+    });
+
+    it('should return empty response', () => {
+      expect(result).to.equal('');
+    });
+  });
+
   describe('when rendering template succeeds', () => {
     beforeEach(done => {
       templateRenderer(
         null,
-        null,
+        {},
         { templateType: 'working-template' },
         next(done)
       );
@@ -61,7 +81,7 @@ describe('client : template-renderer', () => {
     beforeEach(done => {
       templateRenderer(
         null,
-        null,
+        {},
         { templateType: 'braking-template' },
         next(done)
       );
@@ -76,7 +96,7 @@ describe('client : template-renderer', () => {
     beforeEach(done => {
       templateRenderer(
         null,
-        null,
+        {},
         { templateType: 'throwing-template' },
         next(done)
       );
