@@ -1,6 +1,6 @@
 {
   "name": "oc-client",
-  "version": "3.0.10",
+  "version": "3.0.11",
   "description": "Node.js oc client",
   "main": "index.js",
   "repository": {
@@ -18,9 +18,18 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "src/**/*.js": ["prettier-eslint --write", "git add"],
-    "test/unit/**/*.js": ["prettier-eslint --write", "git add"],
-    "test/acceptance/**/*.js": ["prettier-eslint --write", "git add"]
+    "src/**/*.js": [
+      "prettier-eslint --write",
+      "git add"
+    ],
+    "test/unit/**/*.js": [
+      "prettier-eslint --write",
+      "git add"
+    ],
+    "test/acceptance/**/*.js": [
+      "prettier-eslint --write",
+      "git add"
+    ]
   },
   "devDependencies": {
     "chai": "3.5.0",
