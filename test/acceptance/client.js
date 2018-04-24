@@ -3,10 +3,9 @@
 const cheerio = require('cheerio');
 const expect = require('chai').expect;
 const oc = require('oc');
-const ocTemplateEs6 = require('oc-template-es6');
-const ocTemplateHandlebars = require('oc-template-handlebars');
-const ocTemplateJade = require('oc-template-jade');
 const path = require('path');
+
+const templateHeader = require('../test-utils/get-templates-header');
 
 describe('The node.js OC client', () => {
   let registry, client, clientOfflineRegistry, result, $component;
@@ -21,16 +20,6 @@ describe('The node.js OC client', () => {
     env: { name: 'local' },
     verbosity: 0
   };
-
-  const templateVersions = {
-    es6: ocTemplateEs6.getInfo().version,
-    handlebars: ocTemplateHandlebars.getInfo().version,
-    jade: ocTemplateJade.getInfo().version
-  };
-
-  const templateHeader = ['es6', 'handlebars', 'jade']
-    .map(t => `oc-template-${t},${templateVersions[t]}`)
-    .join(';');
 
   const getClientConfig = function(port) {
     return {

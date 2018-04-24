@@ -4,13 +4,8 @@ const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 
-const versions = {
-  es6: require('oc-template-es6').getInfo().version,
-  handlebars: require('oc-template-handlebars').getInfo().version,
-  jade: require('oc-template-jade').getInfo().version
-};
-
 const ocClientVersion = require('../../package.json').version;
+const templateHeader = require('../test-utils/get-templates-header');
 
 const getDefaultUserAgent = () =>
   `oc-client-${ocClientVersion}/${process.version}-${process.platform}-${
@@ -154,9 +149,7 @@ describe('client : warmup', () => {
         headers: {
           'accept-language': 'en-US',
           'user-agent': getDefaultUserAgent(),
-          templates: ['es6', 'handlebars', 'jade']
-            .map(t => `oc-template-${t},${versions[t]}`)
-            .join(';')
+          templates: templateHeader
         },
         method: 'GET',
         timeout: 5
