@@ -219,7 +219,6 @@ describe('The node.js OC client', () => {
         });
 
         it('should contain the error details', () => {
-          expect(error).to.be.Array;
           expect(error.length).to.be.equal(2);
 
           const exp = getRegExpFromJson(expectedRequest),
