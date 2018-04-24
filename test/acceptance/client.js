@@ -3,9 +3,9 @@
 const cheerio = require('cheerio');
 const expect = require('chai').expect;
 const oc = require('oc');
-const ocTemplateHandlebars = require('oc-template-handlebars');
-const ocTemplateJade = require('oc-template-jade');
 const path = require('path');
+
+const templateHeader = require('../test-utils/get-templates-header');
 
 describe('The node.js OC client', () => {
   let registry, client, clientOfflineRegistry, result, $component;
@@ -21,23 +21,13 @@ describe('The node.js OC client', () => {
     verbosity: 0
   };
 
-  const templateVersions = {
-    handlebars: ocTemplateHandlebars.getInfo().version,
-    jade: ocTemplateJade.getInfo().version
-  };
-
-  const templateHeader = `oc-template-handlebars,${templateVersions.handlebars};oc-template-jade,${templateVersions.jade}`;
-
   const getClientConfig = function(port) {
     return {
       registries: {
         clientRendering: `http://localhost:${port}`,
         serverRendering: `http://localhost:${port}`
       },
-      components: {
-        'hello-world': '~1.0.0',
-        'no-containers': ''
-      }
+      components: { 'hello-world': '~1.0.0', 'no-containers': '' }
     };
   };
 
@@ -56,9 +46,7 @@ describe('The node.js OC client', () => {
       registry.start(done);
     });
 
-    after(done => {
-      registry.close(done);
-    });
+    after(done => registry.close(done));
 
     describe('when rendering 2 components', () => {
       describe('when components require params', () => {
@@ -70,17 +58,11 @@ describe('The node.js OC client', () => {
               [
                 {
                   name: 'welcome',
-                  parameters: {
-                    firstName: 'Jane',
-                    lastName: 'Marple'
-                  }
+                  parameters: { firstName: 'Jane', lastName: 'Marple' }
                 },
                 {
                   name: 'welcome',
-                  parameters: {
-                    firstName: 'Hercule',
-                    lastName: 'Poirot'
-                  }
+                  parameters: { firstName: 'Hercule', lastName: 'Poirot' }
                 }
               ],
               { container: false, renderInfo: false },
@@ -107,20 +89,10 @@ describe('The node.js OC client', () => {
           let $errs;
           before(done => {
             client.renderComponents(
-              [
-                {
-                  name: 'welcome'
-                },
-                {
-                  name: 'welcome'
-                }
-              ],
+              [{ name: 'welcome' }, { name: 'welcome' }],
               {
                 container: false,
-                parameters: {
-                  firstName: 'Jane',
-                  lastName: 'Marple'
-                },
+                parameters: { firstName: 'Jane', lastName: 'Marple' },
                 renderInfo: false
               },
               (err, html) => {
@@ -149,15 +121,11 @@ describe('The node.js OC client', () => {
               [
                 {
                   name: 'welcome',
-                  parameters: {
-                    lastName: 'Poirot'
-                  }
+                  parameters: { lastName: 'Poirot' }
                 },
                 {
                   name: 'welcome',
-                  parameters: {
-                    firstName: 'Jane'
-                  }
+                  parameters: { firstName: 'Jane' }
                 }
               ],
               {
@@ -192,14 +160,7 @@ describe('The node.js OC client', () => {
         let $errs;
         before(done => {
           client.renderComponents(
-            [
-              {
-                name: 'hello-world'
-              },
-              {
-                name: 'no-containers'
-              }
-            ],
+            [{ name: 'hello-world' }, { name: 'no-containers' }],
             { container: false, renderInfo: false },
             (err, html) => {
               $errs = err;
@@ -279,14 +240,7 @@ describe('The node.js OC client', () => {
         let $components;
         before(done => {
           client.renderComponents(
-            [
-              {
-                name: 'hello-world'
-              },
-              {
-                name: 'no-containers'
-              }
-            ],
+            [{ name: 'hello-world' }, { name: 'no-containers' }],
             { container: false, renderInfo: false, render: 'client' },
             (err, html) => {
               $components = {
@@ -384,17 +338,11 @@ describe('The node.js OC client', () => {
         before(done => {
           client.renderComponents(
             [
-              {
-                name: 'hello-world-i-dont-exist'
-              },
-              {
-                name: 'no-containers'
-              },
+              { name: 'hello-world-i-dont-exist' },
+              { name: 'no-containers' },
               {
                 name: 'errors-component',
-                parameters: {
-                  errorType: '500'
-                }
+                parameters: { errorType: '500' }
               }
             ],
             {

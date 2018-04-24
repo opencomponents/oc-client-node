@@ -34,19 +34,20 @@
   "devDependencies": {
     "chai": "3.5.0",
     "cheerio": "0.22.0",
+    "husky": "^0.14.3",
     "injectr": "0.5.1",
+    "lint-staged": "^7.0.0",
     "mocha": "^5.0.0",
     "oc": "^0.43.1",
-    "sinon": "^5.0.0",
-    "husky": "^0.14.3",
     "prettier-eslint-cli": "4.7.1",
-    "lint-staged": "^7.0.0"
+    "sinon": "^5.0.0"
   },
   "dependencies": {
     "minimal-request": "3.0.0",
     "nice-cache": "0.0.5",
     "oc-client-browser": "1.3.1",
     "oc-empty-response-handler": "1.0.0",
+    "oc-template-es6": "^1.0.1",
     "oc-template-handlebars": "6.0.13",
     "oc-template-jade": "6.0.12",
     "stringformat": "0.0.5"

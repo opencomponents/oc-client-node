@@ -14,7 +14,9 @@ const lowerHeaderKeys = function(headers) {
 };
 
 const getDefaultUserAgent = () =>
-  `oc-client-${packageInfo.version}/${process.version}-${process.platform}-${process.arch}`;
+  `oc-client-${packageInfo.version}/${process.version}-${process.platform}-${
+    process.arch
+  }`;
 
 const getTemplatesHeadersInfo = templates =>
   templates
@@ -43,6 +45,7 @@ module.exports = {
   sanitiseDefaultOptions,
   sanitiseConfiguration: function(conf) {
     const baseTemplates = [
+      require('oc-template-es6'),
       require('oc-template-handlebars'),
       require('oc-template-jade')
     ];
