@@ -3,21 +3,19 @@
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
-const format = require('stringformat');
 
-const handlebarsTemplateVersion = require('oc-template-handlebars').getInfo()
-  .version;
-const jadeTemplateVersion = require('oc-template-jade').getInfo().version;
-
-const getDefaultUserAgent = function() {
-  return format(
-    'oc-client-{0}/{1}-{2}-{3}',
-    require('../../package.json').version,
-    process.version,
-    process.platform,
-    process.arch
-  );
+const versions = {
+  es6: require('oc-template-es6').getInfo().version,
+  handlebars: require('oc-template-handlebars').getInfo().version,
+  jade: require('oc-template-jade').getInfo().version
 };
+
+const ocClientVersion = require('../../package.json').version;
+
+const getDefaultUserAgent = () =>
+  `oc-client-${ocClientVersion}/${process.version}-${process.platform}-${
+    process.arch
+  }`;
 
 describe('client : warmup', () => {
   let Warmup, requestStub;
@@ -32,13 +30,7 @@ describe('client : warmup', () => {
       }
     );
 
-    Warmup = injectr(
-      '../../src/warmup.js',
-      {
-        'minimal-request': requestStub
-      },
-      { console: console }
-    );
+    Warmup = injectr('../../src/warmup.js', { 'minimal-request': requestStub });
   };
 
   describe('when warming up the client for responsive components', () => {
@@ -53,13 +45,8 @@ describe('client : warmup', () => {
 
       const warmup = new Warmup(
         {
-          components: {
-            component1: '',
-            component2: '1.x.x'
-          },
-          registries: {
-            serverRendering: 'https://my-registry.com'
-          }
+          components: { component1: '', component2: '1.x.x' },
+          registries: { serverRendering: 'https://my-registry.com' }
         },
         renderComponentStub
       );
@@ -115,12 +102,8 @@ describe('client : warmup', () => {
 
       const warmup = new Warmup(
         {
-          components: {
-            'component-with-params': ''
-          },
-          registries: {
-            serverRendering: 'https://my-registry.com'
-          }
+          components: { 'component-with-params': '' },
+          registries: { serverRendering: 'https://my-registry.com' }
         },
         renderComponentStub
       );
@@ -139,9 +122,7 @@ describe('client : warmup', () => {
       expect(renderComponentStub.args[0][0][0]).to.eql({
         name: 'component-with-params',
         version: '1.4.6',
-        parameters: {
-          name: 'John Doe'
-        }
+        parameters: { name: 'John Doe' }
       });
     });
   });
@@ -155,24 +136,15 @@ describe('client : warmup', () => {
       const warmup = new Warmup(
         {
           components: { component1: '' },
-          registries: {
-            serverRendering: 'https://my-registry.com'
-          }
+          registries: { serverRendering: 'https://my-registry.com' }
         },
         () => {}
       );
 
-      warmup(
-        {
-          headers: {
-            'Accept-Language': 'en-US'
-          }
-        },
-        err => {
-          error = err;
-          done();
-        }
-      );
+      warmup({ headers: { 'Accept-Language': 'en-US' } }, err => {
+        error = err;
+        done();
+      });
     });
 
     it('should return an error with all the details', () => {
@@ -182,18 +154,19 @@ describe('client : warmup', () => {
         headers: {
           'accept-language': 'en-US',
           'user-agent': getDefaultUserAgent(),
-          templates: `oc-template-handlebars,${handlebarsTemplateVersion};oc-template-jade,${jadeTemplateVersion}`
+          templates: ['es6', 'handlebars', 'jade']
+            .map(t => `oc-template-${t},${versions[t]}`)
+            .join(';')
         },
         method: 'GET',
         timeout: 5
       };
 
-      const expectedError =
-        'Error: Error warming up oc-client: request ' +
-        JSON.stringify(expectedRequest) +
-        ' failed (timeout)';
-
-      expect(error.toString()).to.be.equal(expectedError);
+      expect(error.toString()).to.be.equal(
+        `Error: Error warming up oc-client: request ${JSON.stringify(
+          expectedRequest
+        )} failed (timeout)`
+      );
     });
   });
 });
