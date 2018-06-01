@@ -45,7 +45,7 @@
   "dependencies": {
     "minimal-request": "3.0.0",
     "nice-cache": "0.0.5",
-    "oc-client-browser": "1.3.1",
+    "oc-client-browser": "1.3.2",
     "oc-empty-response-handler": "1.0.0",
     "oc-template-es6": "^1.0.1",
     "oc-template-handlebars": "6.0.13",
