@@ -50,12 +50,12 @@ module.exports = function(conf) {
           }
         ],
         options,
-        (errors, results) => {
+        (errors, results, details) => {
           if (errors) {
-            return callback(errors[0], results[0]);
+            return callback(errors[0], results[0], details[0]);
           }
 
-          callback(null, results[0]);
+          callback(null, results[0], details[0]);
         }
       );
     },

@@ -113,7 +113,7 @@ client.getComponentsInfo([{
 
 ### Client#renderComponent(componentName [, options], callback)
 
-It will resolve a component href, will make a request to the registry, and will render the component. The callback will contain an error (if present) and rendered html.
+It will resolve a component href, will make a request to the registry, and will render the component. The callback will contain an error (if present), rendered html, and details (which includes headers).
 
 Options:
 
@@ -142,15 +142,15 @@ client.renderComponent('header', {
     loggedIn: true
   },
   timeout: 2
-}, function(err, html){
-  console.log(html);
+}, function(err, html, details){
+  console.log(html, details.headers);
   // => "<div>This is the header. <a>Log-out</a></div>"
 });
 ```
 
 ### Client#renderComponents(components [, options], callback)
 
-It will make a request to the registry, and will render the components. The callback will contain an array of errors (array of `null` in case there aren't any) and an array of rendered html snippets. It will follow the same order of the request. This method will make **1** request to the registry + **n** requests for each component to get the views of components that aren't cached yet. After caching the views, this will make just **1** request to the registry.
+It will make a request to the registry, and will render the components. The callback will contain an array of errors (array of `null` in case there aren't any), an array of rendered html snippets, and an array of details. It will follow the same order of the request. This method will make **1** request to the registry + **n** requests for each component to get the views of components that aren't cached yet. After caching the views, this will make just **1** request to the registry.
 
 Components parameter:
 
@@ -198,8 +198,10 @@ client.renderComponents([{
     'accept-language': 'en-US'
   },
   timeout: 3.0
-}, function(errors, htmls){
-  console.log(html);
+}, function(errors, htmls, details){
+  for ( let i; i < htmls.length; i++) {
+    console.log(htmls[i], details[i].headers);
+  }
   // => ["<div>Header</div>",
   //     "<p>Footer</p>",
   //     "<oc-component href=\"\/\/registry.com\/advert\/?position=left\"><\/oc-component>"]

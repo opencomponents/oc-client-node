@@ -593,6 +593,60 @@ describe('The node.js OC client', () => {
         );
       });
     });
+
+    describe('when rendering components returns details', () => {
+      let $errs;
+      let $details;
+      before(done => {
+        client.renderComponents(
+          [
+            {
+              name: 'headers'
+            }
+          ],
+          { container: false, renderInfo: false },
+          (err, html, details) => {
+            $errs = err;
+            $details = details;
+            done();
+          }
+        );
+      });
+
+      it('should return headers', () => {
+        expect($details[0].headers.header1).to.be.equal('Hello');
+        expect($details[0].headers.header2).to.be.equal('This is a test');
+      });
+
+      it('should return null errors', () => {
+        expect($errs).to.be.null;
+      });
+    });
+
+    describe('when rendering component returns details', () => {
+      let $errs;
+      let $details;
+      before(done => {
+        client.renderComponent(
+          'headers',
+          { container: false, renderInfo: false },
+          (err, html, details) => {
+            $errs = err;
+            $details = details;
+            done();
+          }
+        );
+      });
+
+      it('should return headers', () => {
+        expect($details.headers.header1).to.be.equal('Hello');
+        expect($details.headers.header2).to.be.equal('This is a test');
+      });
+
+      it('should return null errors', () => {
+        expect($errs).to.be.null;
+      });
+    });
   });
 
   describe('when correctly initialised', () => {

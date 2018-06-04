@@ -16,7 +16,7 @@ module.exports = function(config, renderTemplate, templatesModules) {
     renderTemplate,
     templatesModules
   );
-  const processClientReponses = new ProcessClientResponse(cache, config);
+  const processClientResponses = new ProcessClientResponse(cache, config);
 
   return function(components, options, callback) {
     options = sanitiser.sanitiseGlobalRenderOptions(options, config);
@@ -37,24 +37,25 @@ module.exports = function(config, renderTemplate, templatesModules) {
 
     getComponentsData(toDo, options, () => {
       renderComponents(toDo, options, () => {
-        processClientReponses(toDo, options, () => {
+        processClientResponses(toDo, options, () => {
           const errors = [],
-            results = [];
+            results = [],
+            details = [];
           let hasErrors = false;
 
           _.each(toDo, action => {
             if (action.result.error) {
               hasErrors = true;
             }
-
             errors.push(action.result.error || null);
             results.push(action.result.html);
+            details.push({ headers: action.result.headers });
           });
 
           if (hasErrors) {
-            callback(errors, results);
+            callback(errors, results, details);
           } else {
-            callback(null, results);
+            callback(null, results, details);
           }
         });
       });

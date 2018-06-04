@@ -89,7 +89,7 @@ module.exports = function(config) {
       json: true
     };
 
-    request(requestDetails, (error, responses) => {
+    request(requestDetails, (error, responses, details) => {
       if (!!error || !responses || _.isEmpty(responses)) {
         responses = handleErrorResponse(
           requestDetails,
@@ -102,7 +102,8 @@ module.exports = function(config) {
         responses = [
           {
             response: responses,
-            status: 200
+            status: 200,
+            headers: details.response.headers
           }
         ];
       }
@@ -186,6 +187,7 @@ module.exports = function(config) {
               }
             } else {
               action.apiResponse = response.response;
+              action.result.headers = response.headers;
             }
           }
         });
