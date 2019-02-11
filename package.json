@@ -38,7 +38,7 @@
     "injectr": "0.5.1",
     "lint-staged": "^7.0.0",
     "mocha": "^5.0.0",
-    "oc": "^0.44.0",
+    "oc": "^0.45.2",
     "prettier-eslint-cli": "4.7.1",
     "sinon": "^6.0.0"
   },
