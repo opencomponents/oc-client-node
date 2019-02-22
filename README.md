@@ -76,7 +76,7 @@ var client = new Client({
 });
 
 client.init({
-  headers { 'accept-language': 'en-US'}
+  headers: { 'accept-language': 'en-US'}
 }, function(error, responses){
   console.log(error);
   // => something like null or Error making request to registry
