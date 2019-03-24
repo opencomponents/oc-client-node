@@ -31,8 +31,8 @@ module.exports = function(conf) {
 
   return {
     init: function(options, callback) {
-      const renderComponents = options.renderComponents || renderComponents;
-      const warmup = new Warmup(config, renderComponents);
+      const _renderComponents = options.renderComponents || renderComponents;
+      const warmup = new Warmup(config, _renderComponents);
       return warmup(options, callback);
     },
     renderComponent: function(componentName, options, callback) {
