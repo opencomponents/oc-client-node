@@ -141,7 +141,7 @@ module.exports = function(config) {
       return cb(serverRenderingFail);
     }
 
-    const performRequest =
+    let performRequest =
       serverRendering.components.length === 1 ? performGet : performPost;
 
     const method = (options.method || '').toLowerCase();
