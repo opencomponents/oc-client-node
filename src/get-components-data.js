@@ -144,6 +144,13 @@ module.exports = function(config) {
     const performRequest =
       serverRendering.components.length === 1 ? performGet : performPost;
 
+    const method = (options.method || '').toLowerCase();
+    if (method === 'get') {
+        performRequest = performGet;
+    } else if (method === 'post') {
+        performRequest = performPost
+    }
+
     performRequest(
       serverRenderingEndpoint,
       serverRendering,
