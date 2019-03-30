@@ -168,6 +168,7 @@ Options:
 |Parameter|type|mandatory|description|
 |---------|----|---------|-----------|
 |`container`|`boolean`|no|Default true, when false, renders a component without its <oc-component> container|
+|`httpMethod`|`string`|no|Default GET, when false, Allows you specify which HTTP method to use. Available options: GET or POST. Note: If you have more than one component, POST is automatically forced.|
 |`disableFailoverRendering`|`boolean`|no|Disables the automatic failover rendering in case the registry times-out (in case configuration.registries.clientRendering contains a valid value.) Default false|
 |`forwardAcceptLanguageToClient`|`boolean`|no|When not specified in config, defaults to false. When true, when doing client-side requests (normal or failover) appends a custom parameter to the browser's component hrefs so that the framework will ignore the browser's Accept-Language in favour of the query-string value|
 |`headers`|`object`|no|An object containing all the headers that must be forwarded to the component|
