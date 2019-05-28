@@ -38,7 +38,7 @@
     "injectr": "0.5.1",
     "lint-staged": "^7.0.0",
     "mocha": "^5.0.0",
-    "oc": "^0.45.3",
+    "oc": "^0.47.0",
     "prettier-eslint-cli": "4.7.1",
     "sinon": "^6.0.0"
   },
@@ -47,9 +47,9 @@
     "nice-cache": "0.0.5",
     "oc-client-browser": "1.3.4",
     "oc-empty-response-handler": "1.0.0",
-    "oc-template-es6": "^1.0.1",
-    "oc-template-handlebars": "6.0.14",
-    "oc-template-jade": "6.0.12",
+    "oc-template-es6": "1.0.1",
+    "oc-template-handlebars": "6.0.15",
+    "oc-template-jade": "6.0.13",
     "stringformat": "0.0.5"
   },
   "engines": {
