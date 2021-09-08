@@ -1,6 +1,5 @@
 'use strict';
 
-const format = require('stringformat');
 const request = require('minimal-request');
 
 const settings = require('./settings');
@@ -21,11 +20,7 @@ module.exports = function(cache, templateModules) {
             return cb({
               status: err,
               response: {
-                error: format(
-                  settings.connectionError,
-                  template.src,
-                  templateText
-                )
+                error: settings.connectionError(template.src, templateText)
               }
             });
           }

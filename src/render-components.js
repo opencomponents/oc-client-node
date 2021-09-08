@@ -1,7 +1,5 @@
 'use strict';
 
-const format = require('stringformat');
-
 const GetCompiledTemplate = require('./get-compiled-template');
 const settings = require('./settings');
 const _ = require('./utils/helpers');
@@ -65,13 +63,9 @@ module.exports = function(cache, renderTemplate, templateModules) {
             const genericError = !err.response;
             const errorDetails = genericError
               ? err
-              : format(
-                '{0} ({1})',
-                err.response && err.response.error,
-                err.status
-              );
+              : `${err.response && err.response.error} (${err.status})`;
             action.result.error = new Error(
-              format(settings.serverSideRenderingFail, errorDetails)
+              settings.serverSideRenderingFail(errorDetails)
             );
             if (options.disableFailoverRendering) {
               action.result.html = '';

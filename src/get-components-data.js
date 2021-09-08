@@ -1,6 +1,5 @@
 'use strict';
 
-const format = require('stringformat');
 const request = require('minimal-request');
 
 const settings = require('./settings');
@@ -20,7 +19,7 @@ module.exports = function(config) {
 
     if (response && response.error) {
       if (errorDetails) {
-        errorDetails = format('{0} {1}', errorDetails, response.error);
+        errorDetails = `${errorDetails} ${response.error}`;
       } else {
         errorDetails = response.error;
       }
@@ -34,8 +33,7 @@ module.exports = function(config) {
     _.each(components, () => {
       responses.push({
         response: {
-          error: format(
-            settings.connectionError,
+          error: settings.connectionError(
             JSON.stringify(requestDetails),
             errorDetails
           )
@@ -168,15 +166,11 @@ module.exports = function(config) {
                   errorDescription += response.response.details.originalError;
                 }
 
-                errorDetails = format(
-                  '{0} ({1})',
-                  errorDescription || '',
-                  response.status
-                );
+                errorDetails = `${errorDescription || ''} (${response.status})`;
               }
 
               action.result.error = new Error(
-                format(serverRenderingFail, errorDetails)
+                serverRenderingFail(errorDetails)
               );
               if (options.disableFailoverRendering) {
                 action.result.html = '';
