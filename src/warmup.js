@@ -1,6 +1,5 @@
 'use strict';
 
-const format = require('stringformat');
 const request = require('minimal-request');
 
 const sanitiser = require('./sanitiser');
@@ -58,11 +57,7 @@ module.exports = function(config, renderComponents) {
           if (err) {
             return next(
               new Error(
-                format(
-                  settings.warmupFailed,
-                  JSON.stringify(requestDetails),
-                  err
-                )
+                settings.warmupFailed(JSON.stringify(requestDetails), err)
               )
             );
           }

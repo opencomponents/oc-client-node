@@ -2,9 +2,9 @@
 
 module.exports = {
   clientSideRenderingFail: 'Client-side rendering failed',
-  componentGetInfoFail: 'Getting component info failed: {0}',
+  componentGetInfoFail: details => `Getting component info failed: ${details}`,
   configurationNotValid: 'Configuration is not valid: ',
-  connectionError: 'request {0} failed ({1})',
+  connectionError: (src, text) => `request ${src} failed (${text})`,
   clientRenderingOptionsNotSet: 'Client rendering options not set',
   emptyResponse: 'Empty response',
   genericError: 'Internal client error',
@@ -15,7 +15,8 @@ module.exports = {
   registriesIsNotObject: 'registries must be an object',
   templatesIsNotArray: 'templates must be an array',
   templateIsNotValid: 'all templates must be a valid template package',
-  serverSideRenderingFail: 'Server-side rendering failed: {0}',
-  warmupFailed: 'Error warming up oc-client: request {0} failed ({1})',
-  gettingTemplateFailed: 'Error requiring template {0}'
+  serverSideRenderingFail: details =>
+    `Server-side rendering failed: ${details}`,
+  warmupFailed: (details, err) =>
+    `Error warming up oc-client: request ${details} failed (${err})`
 };

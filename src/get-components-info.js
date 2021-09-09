@@ -1,6 +1,5 @@
 'use strict';
 
-const format = require('stringformat');
 const request = require('minimal-request');
 
 const settings = require('./settings');
@@ -62,8 +61,7 @@ module.exports = function(config) {
         _.each(actions.requestedComponents, () => {
           responses.push({
             response: {
-              error: format(
-                settings.connectionError,
+              error: settings.connectionError(
                 JSON.stringify(requestDetails),
                 errorDetails
               )
@@ -91,15 +89,11 @@ module.exports = function(config) {
             ) {
               errorDescription += response.response.details.originalError;
             }
-            errorDetails = format(
-              '{0} ({1})',
-              errorDescription || '',
-              response.status
-            );
+            errorDetails = `${errorDescription || ''} (${response.status})`;
           }
 
           responseData.error = new Error(
-            format(settings.componentGetInfoFail, errorDetails)
+            settings.componentGetInfoFail(errorDetails)
           );
           errors.push(responseData.error);
           hasErrors = true;
