@@ -15,6 +15,7 @@ describe('client : get-component-data', () => {
     const options = {
       parameters: { p1: 'v1', p2: 'v2' },
       headers: { 'header-a': 'header-value b' },
+      httpMethod: 'POST',
       timeout: 10
     };
 
@@ -90,6 +91,7 @@ describe('client : get-component-data', () => {
     const options = {
       parameters: { p1: 'v1', p2: 'v2' },
       headers: { 'header-a': 'header-value b' },
+      httpMethod: 'GET',
       timeout: 10
     };
 
