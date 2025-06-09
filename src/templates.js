@@ -4,8 +4,8 @@ module.exports = {
   clientScript: ({ clientJs, unrenderedComponentTag }) =>
     `<script class="ocClientScript">${clientJs}</script>${unrenderedComponentTag}`,
 
-  componentTag: ({ href, html, key, name, version }) =>
-    `<oc-component href="${href}" data-hash="${key}" data-name="${name ||
+  componentTag: ({ href, html, key, name, version, id }) =>
+    `<oc-component href="${href}" data-hash="${key}" ${id ? `data-id="${id}"` : ''} data-name="${name ||
       ''}" data-rendered="true" data-version="${version}">${html}</oc-component>`,
 
   componentUnrenderedTag: ({ href }) =>
