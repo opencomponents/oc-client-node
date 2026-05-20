@@ -1,6 +1,6 @@
 {
   "name": "oc-client",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Node.js oc client",
   "main": "index.js",
   "repository": {
@@ -48,7 +48,7 @@
     "oc-client-browser": "1.5.4",
     "oc-empty-response-handler": "1.0.2",
     "oc-template-es6": "1.0.6",
-    "oc-template-handlebars": "6.0.24",
+    "oc-template-handlebars": "6.0.26",
     "oc-template-jade": "7.0.5"
   },
   "engines": {
