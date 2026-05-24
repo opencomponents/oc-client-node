@@ -139,8 +139,15 @@ module.exports = function(config) {
       return cb(serverRenderingFail);
     }
 
-    const performRequest =
-      serverRendering.components.length === 1 ? performGet : performPost;
+    let componentsLength = serverRendering.components.length;
+    let performRequest = componentsLength === 1 ? performGet : performPost;
+
+    const method = (options.httpMethod || '').toLowerCase();
+    if (method === 'post') {
+      performRequest = performPost;
+    } else if (method === 'get') {
+      performRequest = componentsLength > 1 ? performPost : performGet;
+    }
 
     performRequest(
       serverRenderingEndpoint,
