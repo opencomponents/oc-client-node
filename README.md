@@ -14,6 +14,14 @@ Disclaimer: This project is still under heavy development and the API is likely 
 
 # API
 
+The client returns promises from `init`, `renderComponent`,
+`renderComponents`, `getComponentsInfo`, and `renderTemplate` when the callback
+is omitted. The promise resolves with the callback's first success value and
+rejects with its error value: `renderComponent` and `renderTemplate` resolve to
+HTML, while `renderComponents` resolves to the HTML array. Existing callback
+forms keep their original return values and timing, and emit one
+`DeprecationWarning` per process.
+
 * [new Client()](#new-clientoptions)
 * [Client#init()](#clientinitoptions-callback)
 * [Client#getComponentsInfo()](#clientgetcomponentsinfocomponents-callback)

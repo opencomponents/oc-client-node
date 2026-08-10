@@ -9,6 +9,29 @@ const validator = require('./validator');
 const Warmup = require('./warmup');
 const _ = require('./utils/helpers');
 
+const warningStoreKey = Symbol.for('opencomponents.deprecation-warnings');
+const callbackWarningId = 'node-oc-client-callback-api';
+
+const warnAboutCallbacks = () => {
+  const warned = process[warningStoreKey] || new Set();
+  process[warningStoreKey] = warned;
+  if (warned.has(callbackWarningId)) {
+    return;
+  }
+
+  warned.add(callbackWarningId);
+  process.emitWarning(
+    'The callback API of the Node.js oc-client is deprecated and will be removed in OpenComponents v1 - use the returned promises instead.',
+    'DeprecationWarning'
+  );
+};
+
+const toComponent = (componentName, options) => ({
+  name: componentName,
+  version: options.version,
+  parameters: options.parameters || options.params
+});
+
 module.exports = function(conf) {
   const config = sanitiser.sanitiseConfiguration(conf);
   const validationResult = validator.validateConfiguration(config);
@@ -30,34 +53,51 @@ module.exports = function(conf) {
   }
 
   return {
+    supportsPromiseApi: true,
     init: function(options, callback) {
-      const _renderComponents = options.renderComponents || renderComponents;
-      const warmup = new Warmup(config, _renderComponents);
-      return warmup(options, callback);
+      if (_.isFunction(options)) {
+        callback = options;
+        options = {};
+      }
+      options = options || {};
+
+      if (_.isFunction(callback)) {
+        warnAboutCallbacks();
+        const _renderComponents = options.renderComponents || renderComponents;
+        return new Warmup(config, _renderComponents)(options, callback);
+      }
+
+      return new Promise((resolve, reject) => {
+        const _renderComponents = options.renderComponents || renderComponents;
+        const warmup = new Warmup(config, _renderComponents);
+        warmup(options, (error, result) =>
+          error ? reject(error) : resolve(result)
+        );
+      });
     },
     renderComponent: function(componentName, options, callback) {
       if (_.isFunction(options)) {
         callback = options;
         options = {};
       }
+      options = options || {};
+      const components = [toComponent(componentName, options)];
 
-      renderComponents(
-        [
-          {
-            name: componentName,
-            version: options.version,
-            parameters: options.parameters || options.params
-          }
-        ],
-        options,
-        (errors, results, details) => {
-          if (errors) {
-            return callback(errors[0], results[0], details[0]);
-          }
+      if (_.isFunction(callback)) {
+        warnAboutCallbacks();
+        return renderComponents(
+          components,
+          options,
+          (errors, results, details) =>
+            callback(errors ? errors[0] : null, results[0], details[0])
+        );
+      }
 
-          callback(null, results[0], details[0]);
-        }
-      );
+      return new Promise((resolve, reject) => {
+        renderComponents(components, options, (errors, results) =>
+          errors ? reject(errors[0]) : resolve(results[0])
+        );
+      });
     },
     renderComponents: function(components, options, callback) {
       if (_.isFunction(options)) {
@@ -65,11 +105,40 @@ module.exports = function(conf) {
         options = {};
       }
 
-      renderComponents(components, options, callback);
+      if (_.isFunction(callback)) {
+        warnAboutCallbacks();
+        return renderComponents(components, options, callback);
+      }
+
+      return new Promise((resolve, reject) => {
+        renderComponents(components, options, (errors, results) =>
+          errors ? reject(errors) : resolve(results)
+        );
+      });
     },
     getComponentsInfo: function(components, callback) {
-      getComponentsInfo(components, callback);
+      if (_.isFunction(callback)) {
+        warnAboutCallbacks();
+        return getComponentsInfo(components, callback);
+      }
+
+      return new Promise((resolve, reject) => {
+        getComponentsInfo(components, (error, result) =>
+          error ? reject(error) : resolve(result)
+        );
+      });
     },
-    renderTemplate: renderTemplate
+    renderTemplate: function(template, model, options, callback) {
+      if (_.isFunction(callback)) {
+        warnAboutCallbacks();
+        return renderTemplate(template, model, options, callback);
+      }
+
+      return new Promise((resolve, reject) => {
+        renderTemplate(template, model, options, (error, html) =>
+          error ? reject(error) : resolve(html)
+        );
+      });
+    }
   };
 };
