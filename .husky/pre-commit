@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx --no-install lint-staged
+npx --no-install biome format --write --staged --no-errors-on-unmatched && git update-index --again
