@@ -36,6 +36,6 @@
     "oc-template-jade": "7.0.5"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=22"
   }
 }
