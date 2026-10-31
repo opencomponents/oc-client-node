@@ -14,32 +14,16 @@
   },
   "homepage": "https://github.com/opencomponents/oc-client-node",
   "scripts": {
-    "test": "mocha test/**/*.js",
-    "precommit": "lint-staged"
-  },
-  "lint-staged": {
-    "src/**/*.js": [
-      "prettier-eslint --write",
-      "git add"
-    ],
-    "test/unit/**/*.js": [
-      "prettier-eslint --write",
-      "git add"
-    ],
-    "test/acceptance/**/*.js": [
-      "prettier-eslint --write",
-      "git add"
-    ]
+    "test": "mocha test/**/*.js"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.0",
     "chai": "^4.3.4",
     "cheerio": "0.22.0",
     "husky": "7.0.2",
     "injectr": "0.5.1",
-    "lint-staged": "11.2.3",
     "mocha": "9.1.3",
     "oc": "0.49.2",
-    "prettier-eslint-cli": "5.0.1",
     "sinon": "^11.1.2"
   },
   "dependencies": {
@@ -52,6 +36,6 @@
     "oc-template-jade": "7.0.5"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=22"
   }
 }

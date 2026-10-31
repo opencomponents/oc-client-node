@@ -21,17 +21,17 @@ describe('The node.js OC client', () => {
     verbosity: 0
   };
 
-  const getClientConfig = function(port) {
+  const getClientConfig = function (port, host = 'localhost') {
     return {
       registries: {
-        clientRendering: `http://localhost:${port}`,
-        serverRendering: `http://localhost:${port}`
+        clientRendering: `http://${host}:${port}`,
+        serverRendering: `http://${host}:${port}`
       },
       components: { 'hello-world': '~1.0.0', 'no-containers': '' }
     };
   };
 
-  const getRegExpFromJson = function(x) {
+  const getRegExpFromJson = function (x) {
     return JSON.stringify(x)
       .replace(/\+/g, '\\+')
       .replace(/\[/g, '\\[')
@@ -39,21 +39,21 @@ describe('The node.js OC client', () => {
   };
 
   describe('when initialised providing registries properties', () => {
-    before(done => {
+    before((done) => {
       client = new ocClient(getClientConfig(3030));
-      clientOfflineRegistry = new ocClient(getClientConfig(1234));
+      clientOfflineRegistry = new ocClient(getClientConfig(1234, '127.0.0.1'));
       registry = new oc.Registry(conf);
       registry.start(done);
     });
 
-    after(done => registry.close(done));
+    after((done) => registry.close(done));
 
     describe('when rendering 2 components', () => {
       describe('when components require params', () => {
         describe('when each component requires different params', () => {
           let $components;
           let $errs;
-          before(done => {
+          before((done) => {
             client.renderComponents(
               [
                 {
@@ -87,7 +87,7 @@ describe('The node.js OC client', () => {
         describe('when each component requires the same params', () => {
           let $components;
           let $errs;
-          before(done => {
+          before((done) => {
             client.renderComponents(
               [{ name: 'welcome' }, { name: 'welcome' }],
               {
@@ -116,7 +116,7 @@ describe('The node.js OC client', () => {
         describe('when components have some common parameters and some different', () => {
           let $components;
           let $errs;
-          before(done => {
+          before((done) => {
             client.renderComponents(
               [
                 {
@@ -158,7 +158,7 @@ describe('The node.js OC client', () => {
       describe('when rendering both on the server-side', () => {
         let $components;
         let $errs;
-        before(done => {
+        before((done) => {
           client.renderComponents(
             [{ name: 'hello-world' }, { name: 'no-containers' }],
             { container: false, renderInfo: false },
@@ -186,7 +186,7 @@ describe('The node.js OC client', () => {
       describe('when the request body is malformed (empty)', () => {
         let error, result;
 
-        before(done => {
+        before((done) => {
           client.renderComponents(
             [{}, {}],
             { disableFailoverRendering: true },
@@ -237,7 +237,7 @@ describe('The node.js OC client', () => {
 
       describe('when rendering both on the client-side', () => {
         let $components;
-        before(done => {
+        before((done) => {
           client.renderComponents(
             [{ name: 'hello-world' }, { name: 'no-containers' }],
             { container: false, renderInfo: false, render: 'client' },
@@ -263,7 +263,7 @@ describe('The node.js OC client', () => {
 
       describe('when rendering one on the server, one on the client', () => {
         let $components;
-        before(done => {
+        before((done) => {
           client.renderComponents(
             [
               {
@@ -299,7 +299,7 @@ describe('The node.js OC client', () => {
 
       describe('when rendering one with container, one without container', () => {
         let $components;
-        before(done => {
+        before((done) => {
           client.renderComponents(
             [
               {
@@ -334,7 +334,7 @@ describe('The node.js OC client', () => {
 
       describe('when there are errors in some of them', () => {
         let $errs;
-        before(done => {
+        before((done) => {
           client.renderComponents(
             [
               { name: 'hello-world-i-dont-exist' },
@@ -349,7 +349,7 @@ describe('The node.js OC client', () => {
               renderInfo: false,
               disableFailoverRendering: true
             },
-            err => {
+            (err) => {
               $errs = err;
               done();
             }
@@ -369,7 +369,7 @@ describe('The node.js OC client', () => {
     });
 
     describe('when server-side rendering an existing component linked to a responsive registry', () => {
-      before(done => {
+      before((done) => {
         client.renderComponent(
           'hello-world',
           { container: true },
@@ -389,7 +389,7 @@ describe('The node.js OC client', () => {
     });
 
     describe('when server-side rendering an existing component overriding registry urls', () => {
-      before(done => {
+      before((done) => {
         const options = {
           container: true,
           registries: {
@@ -417,7 +417,7 @@ describe('The node.js OC client', () => {
     });
 
     describe('when client-side rendering an existing component overriding registry urls', () => {
-      before(done => {
+      before((done) => {
         const options = {
           container: true,
           registries: {
@@ -445,7 +445,7 @@ describe('The node.js OC client', () => {
     });
 
     describe('when client-side rendering an existing component', () => {
-      before(done => {
+      before((done) => {
         clientOfflineRegistry.renderComponent(
           'hello-world',
           { render: 'client' },
@@ -458,7 +458,7 @@ describe('The node.js OC client', () => {
 
       it('should use clientRendering url', () => {
         expect($component.attr('href')).to.equal(
-          'http://localhost:1234/hello-world/~1.0.0'
+          'http://127.0.0.1:1234/hello-world/~1.0.0'
         );
       });
     });
@@ -467,7 +467,7 @@ describe('The node.js OC client', () => {
       let error;
       let info;
 
-      before(done => {
+      before((done) => {
         client.getComponentsInfo(
           [
             {
@@ -519,7 +519,7 @@ describe('The node.js OC client', () => {
       let error;
       let info;
 
-      before(done => {
+      before((done) => {
         client.getComponentsInfo(
           [
             {
@@ -597,7 +597,7 @@ describe('The node.js OC client', () => {
     describe('when rendering components returns details', () => {
       let $errs;
       let $details;
-      before(done => {
+      before((done) => {
         client.renderComponents(
           [
             {
@@ -626,7 +626,7 @@ describe('The node.js OC client', () => {
     describe('when rendering component returns details', () => {
       let $errs;
       let $details;
-      before(done => {
+      before((done) => {
         client.renderComponent(
           'headers',
           { container: false, renderInfo: false },
@@ -650,20 +650,27 @@ describe('The node.js OC client', () => {
   });
 
   describe('when correctly initialised', () => {
-    before(done => {
+    let registryServer;
+
+    before((done) => {
       client = new ocClient(getClientConfig(3030));
-      clientOfflineRegistry = new ocClient(getClientConfig(1234));
+      clientOfflineRegistry = new ocClient(getClientConfig(1234, '127.0.0.1'));
       registry = new oc.Registry(conf);
-      registry.start(done);
+      registry.start((err, started) => {
+        registryServer = started && started.server;
+        done(err);
+      });
     });
 
-    after(done => {
+    after((done) => {
       registry.close(done);
+      // Keep-alive sockets can keep the callback pending on newer Node.js.
+      registryServer.closeAllConnections();
     });
 
     describe('when server-side rendering an existing component linked to a non responsive registry', () => {
       const expectedRequest = {
-        url: 'http://localhost:1234/hello-world/~1.0.0',
+        url: 'http://127.0.0.1:1234/hello-world/~1.0.0',
         method: 'get',
         headers: {
           'user-agent': 'oc-client-(.*?)',
@@ -677,7 +684,7 @@ describe('The node.js OC client', () => {
       describe('when client-side failover rendering disabled', () => {
         let error;
 
-        before(done => {
+        before((done) => {
           const options = { disableFailoverRendering: true };
 
           clientOfflineRegistry.renderComponent(
@@ -711,7 +718,7 @@ describe('The node.js OC client', () => {
       describe('when client-side failover rendering enabled (default)', () => {
         let $clientScript, error;
 
-        before(done => {
+        before((done) => {
           clientOfflineRegistry.renderComponent('hello-world', (err, html) => {
             error = err;
             const $ = cheerio.load(html);
@@ -731,7 +738,7 @@ describe('The node.js OC client', () => {
 
         it('should contain the component url', () => {
           expect($component.attr('href')).to.equal(
-            'http://localhost:1234/hello-world/~1.0.0'
+            'http://127.0.0.1:1234/hello-world/~1.0.0'
           );
         });
 
@@ -759,7 +766,7 @@ describe('The node.js OC client', () => {
           }
         };
 
-        before(done => {
+        before((done) => {
           clientOfflineRegistry.renderComponent(
             'hello-world',
             options,
@@ -779,13 +786,13 @@ describe('The node.js OC client', () => {
 
         it('should contain the component url including parameters and __ocAcceptLanguage parameter', () => {
           const u =
-            'http://localhost:1234/hello-world/~1.0.0/?hi=john&__ocAcceptLanguage=da%2C%20en-gb%3Bq%3D0.8%2C%20en%3Bq%3D0.7';
+            'http://127.0.0.1:1234/hello-world/~1.0.0/?hi=john&__ocAcceptLanguage=da%2C%20en-gb%3Bq%3D0.8%2C%20en%3Bq%3D0.7';
           expect($component.attr('href')).to.equal(u);
         });
 
         it('should contain the error details', () => {
           const expectedRequestWithExtraParams = {
-            url: 'http://localhost:1234/hello-world/~1.0.0/??hi=john',
+            url: 'http://127.0.0.1:1234/hello-world/~1.0.0/??hi=john',
             method: 'get',
             headers: {
               'accept-language': 'da, en-gb;q=0.8, en;q=0.7',
@@ -813,7 +820,7 @@ describe('The node.js OC client', () => {
       describe('when the component is missing', () => {
         let error, result;
 
-        before(done => {
+        before((done) => {
           client.renderComponent(
             'non-existing-component',
             {
@@ -860,8 +867,7 @@ describe('The node.js OC client', () => {
         let error, result;
 
         const expectedRequest = {
-          url:
-            'http://localhost:3030/errors-component/??errorType=timeout&timeout=1000',
+          url: 'http://localhost:3030/errors-component/??errorType=timeout&timeout=1000',
           method: 'get',
           headers: {
             'user-agent': 'oc-client-(.*?)',
@@ -872,7 +878,7 @@ describe('The node.js OC client', () => {
           json: true
         };
 
-        before(done => {
+        before((done) => {
           client.renderComponent(
             'errors-component',
             {
@@ -906,7 +912,7 @@ describe('The node.js OC client', () => {
 
       describe('when container option = true', () => {
         let error;
-        before(done => {
+        before((done) => {
           client.renderComponent(
             'hello-world',
             { container: true },
@@ -942,7 +948,7 @@ describe('The node.js OC client', () => {
       });
 
       describe('when container option = false', () => {
-        before(done => {
+        before((done) => {
           client.renderComponent(
             'hello-world',
             { container: false, renderInfo: false },
@@ -963,7 +969,7 @@ describe('The node.js OC client', () => {
       let error;
       let info;
 
-      before(done => {
+      before((done) => {
         clientOfflineRegistry.getComponentsInfo(
           [
             {
@@ -983,7 +989,7 @@ describe('The node.js OC client', () => {
       });
 
       const expectedRequest = {
-        url: 'http://localhost:1234',
+        url: 'http://127.0.0.1:1234',
         method: 'post',
         headers: {
           'user-agent': 'oc-client-(.*?)',
